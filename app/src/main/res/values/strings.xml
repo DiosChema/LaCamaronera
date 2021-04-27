@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">La Camaronera</string>
+    <string name="email">Correo electronico</string>
+    <string name="password">Contraseña</string>
+    <string name="login_login">Iniciar Sesion</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="menu_sale">Venta</string>
+    <string name="menu_stock">Inventario</string>
+
+    <string name="dish_name">Nombre</string>
+    <string name="dish_price">Precio</string>
+    <string name="dish_group">Familia</string>
+    <string name="dish_description">Descripcion</string>
+    <string name="dish_add">Agregar</string>
+
+
+    <string name="inventory_dish">Platillos</string>
+    <string name="inventory_ingredients">Ingredientes</string>
+
+
+    <string name="inventory_add_dish">Agregar Platillo</string>
+    <string name="inventory_add_ingredients">Agregar Ingredientes</string>
+    <string name="inventory_add_group">Agregar Grupo</string>
+
+
+    <string name="group_add">Agregar Grupo</string>
+    <string name="group_add_title">Nombre grupo</string>
+
+
+    <string name="wait">Favor de esperar un momento</string>
+    <string name="error">Ocurrio un error, favor de esperar un momento</string>
+
+
+    <string name="dialog_cancel">Cancelar</string>
+    <string name="dialog_accept">Aceptar</string>
+
+</resources>
