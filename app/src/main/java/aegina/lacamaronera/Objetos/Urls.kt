@@ -2,17 +2,26 @@ package aegina.lacamaronera.Objetos
 
 data class Urls(
     var url:String,
-    var endPointsGrupo:UrlsGrupos
+    var endPointsGrupo:UrlsGrupos,
+    var endPointsIngredientes:UrlsIngredientes,
+    var endPointsImagenes: UrlsImagenes
 )
 {
     constructor(): this(
         "https://pocketsale.us-3.evennode.com/Camaroneria/",
-        /*"http://pvgestordeinventario-env.eba-p2bc44jy.us-east-1.elasticbeanstalk.com/",*/
         UrlsGrupos(
-            "Familias/ObtenerFamilias",
-            "Familias/AltaFamilia",
-            "Familias/ActualizarFamilia",
-            "Familias/EliminarFamilia"
+            "Familia/ObtenerFamilias",
+            "Familia/AltaFamilia",
+            "Familia/ActualizarFamilia",
+            "Familia/EliminarFamilia"
+        ),
+        UrlsIngredientes(
+            "Ingrediente/AltaIngrediente",
+            "Ingrediente/ConsultaIngredientes"
+        ),
+        UrlsImagenes(
+            "Imagen/subirImagen",
+            "Imagen/obtenerImagen?image="
         )
     )
 }
@@ -22,4 +31,14 @@ data class UrlsGrupos(
     val endPointAltaGrupo:String,
     val endPointActualizarFamilia:String,
     val endPointEliminarFamilia:String
+)
+
+data class UrlsIngredientes(
+    val endPointAltaIngrediente:String,
+    val endPointObtenerIngrediente:String
+)
+
+data class UrlsImagenes(
+    val endPointAltaImagen:String,
+    val endPointObtenerImagen:String
 )

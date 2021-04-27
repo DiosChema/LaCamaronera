@@ -9,6 +9,7 @@ import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
 import aegina.lacamaronera.RecyclerView.RecyclerViewGrupos
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ import kotlin.collections.ArrayList
 
 class Group : AppCompatActivity(), DialogGruop.DialogGroup {
 
+    lateinit var dialogPhoto: Dialog
     var listGroup: MutableList<GroupObj> = ArrayList()
     private val urls: Urls = Urls()
     lateinit var contextTmp : Context
@@ -339,4 +341,5 @@ class Group : AppCompatActivity(), DialogGruop.DialogGroup {
             }
         })
     }
+
 }

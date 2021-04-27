@@ -40,12 +40,6 @@ class RecyclerViewGrupos : RecyclerView.Adapter<RecyclerViewGrupos.ViewHolder>()
         return position
     }
 
-    fun updateReceiptsList(newlist: ArrayList<GroupObj>) {
-        groups.clear()
-        groups.addAll(newlist)
-        notifyDataSetChanged()
-    }
-
     override fun getItemCount(): Int {return groups.size}
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

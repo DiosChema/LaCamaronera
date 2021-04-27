@@ -1,8 +1,9 @@
-package aegina.lacamaronera.Activities
+package aegina.lacamaronera.Activities.Fragments
 
+import aegina.lacamaronera.Activities.Dishes
+import aegina.lacamaronera.Activities.Group
 import aegina.lacamaronera.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

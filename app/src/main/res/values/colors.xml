@@ -9,4 +9,5 @@
     <color name="blue">#45aaf1</color>
     <color name="light_blue">#7cc3f5</color>
     <color name="light_background">#2199ee</color>
+    <color name="imageBorderColor">#ebece7</color>
 </resources>

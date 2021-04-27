@@ -65,7 +65,7 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 startActivity(i)
             }
             R.id.drawerMenuStock -> {
-                i.setClass(this, DishesFragment::class.java)
+                i.setClass(this, PagerInventory::class.java)
                 startActivity(i)
             }
         }

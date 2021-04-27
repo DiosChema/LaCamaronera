@@ -1,5 +1,7 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Activities.Fragments.DishesFragment
+import aegina.lacamaronera.Activities.Fragments.IngredientsFragment
 import aegina.lacamaronera.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,8 +25,8 @@ class PagerInventory : AppCompatActivity() {
     fun asignarFragments()
     {
         adapter = MyViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(DishesFragment() , getString(R.string.inventory_dish))
-        adapter.addFragment(IngredientsFragment() , getString(R.string.inventory_ingredients))
+        adapter.addFragment(DishesFragment(), getString(R.string.inventory_dish))
+        adapter.addFragment(IngredientsFragment(), getString(R.string.inventory_ingredients))
         pagerInventoryPager.adapter = adapter
         pagerInventoryTabLayout.setupWithViewPager(pagerInventoryPager)
     }
