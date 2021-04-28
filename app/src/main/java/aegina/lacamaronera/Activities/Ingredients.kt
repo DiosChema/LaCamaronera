@@ -15,10 +15,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import de.hdodenhof.circleimageview.CircleImageView
@@ -38,9 +36,6 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
     lateinit var ingredientsPhoto: CircleImageView
 
     var dialogSelectPhoto = DialogSelectPhoto()
-
-    private val PERMISSION_CODE = 1000
-    private val IMAGE_CAPTURE_CODE = 1001
     var cambioFoto : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +56,14 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
         var ingredientsPrice: TextView = findViewById(R.id.ingredientsPrice)
         var ingredientsDescription: TextView = findViewById(R.id.ingredientsDescription)
         var ingredientsExistence: TextView = findViewById(R.id.ingredientsExistence)
-        var dishMeasurement: Spinner = findViewById(R.id.dishMeasurement)
-        var dishAdd: Button = findViewById(R.id.dishAdd)
+        var dishMeasurement: Spinner = findViewById(R.id.ingredientsMeasurement)
+        var dishAdd: Button = findViewById(R.id.ingredientsAdd)
+        var ingredientsCancel: Button = findViewById(R.id.ingredientsCancel)
+        var ingredientsDelete: ImageButton = findViewById(R.id.ingredientsDelete)
         ingredientsPhoto = findViewById(R.id.ingredientsPhoto)
+
+        ingredientsDelete.visibility = View.INVISIBLE
+        ingredientsCancel.visibility = View.INVISIBLE
 
         var ListMeasurement: ArrayList<String> = ArrayList()
 
@@ -79,8 +79,9 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
         {
             if( ingredientsName.text.length > 2 &&
                 ingredientsDescription.text.length > 4 &&
-                ingredientsExistence.text.length > 0 &&
-                ingredientsPrice.text.length > 0)
+                ingredientsExistence.text.isNotEmpty() &&
+                ingredientsPrice.text.isNotEmpty()
+            )
             {
                 val ingredientObj = IngredientObj(
                     0,

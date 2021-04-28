@@ -4,7 +4,8 @@ data class Urls(
     var url:String,
     var endPointsGrupo:UrlsGrupos,
     var endPointsIngredientes:UrlsIngredientes,
-    var endPointsImagenes: UrlsImagenes
+    var endPointsImagenes: UrlsImagenes,
+    var endPointDishes: UrlsDishes
 )
 {
     constructor(): this(
@@ -17,11 +18,17 @@ data class Urls(
         ),
         UrlsIngredientes(
             "Ingrediente/AltaIngrediente",
-            "Ingrediente/ConsultaIngredientes"
+            "Ingrediente/ConsultaIngredientes",
+            "Ingrediente/ConsultarIngrediente",
+            "Ingrediente/ActualizaIngrediente",
+            "Ingrediente/BajaIngrediente"
         ),
         UrlsImagenes(
             "Imagen/subirImagen",
             "Imagen/obtenerImagen?image="
+        ),
+        UrlsDishes(
+            "Inventario/ConsultarPlatillos"
         )
     )
 }
@@ -35,10 +42,17 @@ data class UrlsGrupos(
 
 data class UrlsIngredientes(
     val endPointAltaIngrediente:String,
-    val endPointObtenerIngrediente:String
+    val endPointObtenerIngredientes:String,
+    val endPointObtenerIngrediente:String,
+    val endPointActualizarIngrediente:String,
+    val endPointEliminarIngrediente:String
 )
 
 data class UrlsImagenes(
     val endPointAltaImagen:String,
     val endPointObtenerImagen:String
+)
+
+data class UrlsDishes(
+    val endPointConsultarPlatillos: String
 )

@@ -67,7 +67,7 @@ class IngredientsFragment : Fragment() {
     private fun createRecyclerView()
     {
         mViewIngredient = RecyclerViewIngredientes()
-        val mRecyclerView = IngredientsDish
+        val mRecyclerView = InventoryIngredient
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
         mViewIngredient.RecyclerAdapter(listIngredients, contextTmp)
@@ -76,7 +76,7 @@ class IngredientsFragment : Fragment() {
 
     fun getIngredients()
     {
-        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngrediente
+        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)

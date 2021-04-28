@@ -22,7 +22,6 @@ import java.util.*
 
 class Photo
 {
-
     var image_uri: Uri? = null
 
     fun abrirCamara(contextTmp: Context, activityTmp: Activity)

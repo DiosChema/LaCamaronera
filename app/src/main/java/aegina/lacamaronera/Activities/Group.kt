@@ -198,6 +198,7 @@ class Group : AppCompatActivity(), DialogGruop.DialogGroup {
                             }
                             else
                             {
+                                progressDialog.dismiss()
                                 errores.procesarErrorMensaje(contextTmp, activityTmp, respuesta)
                             }
                         }
@@ -264,6 +265,7 @@ class Group : AppCompatActivity(), DialogGruop.DialogGroup {
                             }
                             else
                             {
+                                progressDialog.dismiss()
                                 errores.procesarErrorMensaje(contextTmp, activityTmp, respuesta)
                             }
                         }
@@ -328,6 +330,7 @@ class Group : AppCompatActivity(), DialogGruop.DialogGroup {
                             }
                             else
                             {
+                                progressDialog.dismiss()
                                 errores.procesarErrorMensaje(contextTmp, activityTmp, respuesta)
                             }
                         }

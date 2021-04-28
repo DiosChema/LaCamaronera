@@ -1,127 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Dishes"
-    android:layout_margin="25dp"
-    android:orientation="vertical">
+    android:layout_margin="25dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="15dp">
+        android:orientation="vertical">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ingredientsPhoto"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@android:drawable/ic_menu_camera"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/imageBorderColor"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ingredientsPhoto"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@android:drawable/ic_menu_camera"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/imageBorderColor"/>
 
-    </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dish_name"
-        style="@style/TitleText">
+        </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ingredientsName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dish_name"
+            style="@style/TitleText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ingredientsName"
+                style="@style/TitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="30" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dish_cost"
+            style="@style/TitleText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ingredientsPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:drawablePadding="5dp"
+                style="@style/TitleText" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dish_description"
+            style="@style/TitleText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ingredientsDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:drawablePadding="5dp"
+                style="@style/TitleText" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/dish_existence"
+            style="@style/TitleText">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ingredientsExistence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:drawablePadding="5dp"
+                style="@style/TitleText" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dish_measurement"
             style="@style/TitleText"
+            android:textSize="15sp"/>
+
+        <Spinner
+            android:id="@+id/ingredientsMeasurement"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="5dp"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLength="30" />
+            android:background="@color/background"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dish_cost"
-        style="@style/TitleText">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ingredientsPrice"
+        <Button
+            android:id="@+id/ingredientsAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:drawablePadding="5dp"
-            style="@style/TitleText" />
+            android:text="@string/dish_add"
+            android:background="@drawable/button_blue"
+            style="@style/Button"
+            android:layout_marginTop="15dp"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dish_description"
-        style="@style/TitleText">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ingredientsDescription"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:drawablePadding="5dp"
-            style="@style/TitleText" />
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="50dp"
+                android:layout_weight="7" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/dish_existence"
-        style="@style/TitleText">
+            <Button
+                android:id="@+id/ingredientsCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:layout_marginTop="15dp"
+                android:text="@string/dialog_cancel"
+                android:background="@drawable/button_red"
+                android:textColor="@color/red"
+                style="@style/Button"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ingredientsExistence"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:inputType="numberDecimal"
-            android:drawablePadding="5dp"
-            style="@style/TitleText" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="7" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <ImageButton
+                android:id="@+id/ingredientsDelete"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:srcCompat="@android:drawable/ic_menu_delete"
+                android:layout_gravity="bottom"
+                android:background="@color/background"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dish_measurement"
-        style="@style/TitleText"
-        android:textSize="15sp"/>
-
-    <Spinner
-        android:id="@+id/dishMeasurement"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"/>
-
-    <Button
-        android:id="@+id/dishAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dish_add" />
-
-
-</LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
