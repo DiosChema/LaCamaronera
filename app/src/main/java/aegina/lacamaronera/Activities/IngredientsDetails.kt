@@ -23,6 +23,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import com.google.gson.GsonBuilder
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
 import org.json.JSONException
@@ -134,6 +135,7 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
     private fun llenarDatos()
     {
         var contador = 0
+        ingredientsPhoto.loadUrl(urls.url + urls.endPointsImagenes.endPointObtenerImagen + "in" + ingredientObj.idIngrediente+".jpeg")
         ingredientsName.text = ingredientObj.nombre
         ingredientsPrice.text = ingredientObj.costo.toString()
         ingredientsDescription.text = ingredientObj.descripcion
@@ -479,6 +481,12 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
         }
 
 
+    }
+
+    fun ImageView.loadUrl(url: String) {
+        try {
+            Picasso.with(context).load(url).noFade().into(this)}
+        catch(e: java.lang.Exception){}
     }
 
     companion object {

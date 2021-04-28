@@ -2,6 +2,7 @@ package aegina.lacamaronera.RecyclerView
 
 import aegina.lacamaronera.Activities.DishesDetails
 import aegina.lacamaronera.Objetos.DishesObj
+import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
 import android.content.Context
@@ -14,12 +15,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class RecyclerViewDishes : RecyclerView.Adapter<RecyclerViewDishes.ViewHolder>() {
+class RecyclerViewDishIngredients : RecyclerView.Adapter<RecyclerViewDishIngredients.ViewHolder>() {
 
-    var groups: MutableList<DishesObj> = ArrayList()
+    var groups: MutableList<IngredientObj> = ArrayList()
     lateinit var context: Context
 
-    fun RecyclerAdapter(listGroups: MutableList<DishesObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<IngredientObj>, context: Context) {
         this.groups = listGroups
         this.context = context
     }
@@ -31,7 +32,7 @@ class RecyclerViewDishes : RecyclerView.Adapter<RecyclerViewDishes.ViewHolder>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ViewHolder(layoutInflater.inflate(R.layout.item_dishes,parent,false))
+        return ViewHolder(layoutInflater.inflate(R.layout.item_dish_ingredient,parent,false))
     }
 
     override fun getItemId(position: Int): Long {
@@ -46,28 +47,17 @@ class RecyclerViewDishes : RecyclerView.Adapter<RecyclerViewDishes.ViewHolder>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val url = Urls()
-        var itemIngredientImage = view.findViewById(R.id.itemDishImage) as ImageView
-        var itemIngredientName = view.findViewById(R.id.itemDishName) as TextView
-        var itemIngredientDescription = view.findViewById(R.id.itemDishDescription) as TextView
-        var itemIngredientPrice = view.findViewById(R.id.itemDishPrice) as TextView
+        var itemDishIngredientPhoto = view.findViewById(R.id.itemDishIngredientPhoto) as ImageView
+        var itemDishIngredientAmount = view.findViewById(R.id.itemDishIngredientAmount) as TextView
 
-        fun bind(articulo: DishesObj) {
-            itemIngredientName.text = articulo.nombre
-            itemIngredientDescription.text = articulo.descripcion
-            itemIngredientPrice.text = articulo.precio.toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "pl" + articulo.idPlatillo+".jpeg"
-            itemIngredientImage.loadUrl(url)
-
-            itemView.setOnClickListener()
-            {
-                val intent = Intent(itemView.context, DishesDetails::class.java).apply {
-                    putExtra("idIngrediente", articulo.idPlatillo)
-                }
-                itemView.context.startActivity(intent)
-            }
+        fun bind(articulo: IngredientObj) {
+            val textTmp = articulo.existencia.toString() + " " + articulo.unidad
+            itemDishIngredientAmount.text = textTmp
+            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+".jpeg"
+            itemDishIngredientPhoto.loadUrl(url)
         }
 
-        fun ImageView.loadUrl(url: String) {
+        private fun ImageView.loadUrl(url: String) {
             try {
                 Picasso.with(context).load(url).into(this)}
             catch(e: Exception){}

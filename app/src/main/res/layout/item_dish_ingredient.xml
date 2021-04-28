@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:background="@color/transparent"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/itemDishIngredientPhoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@android:drawable/ic_menu_camera"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#ebece7"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/itemDishIngredientAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TitleText"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:maxLines="1">
+
+    </TextView>
+</LinearLayout>
