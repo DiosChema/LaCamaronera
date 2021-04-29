@@ -1,7 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
 import aegina.lacamaronera.Activities.IngredientsDetails
-import aegina.lacamaronera.Objetos.GroupObj
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -15,7 +14,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
-class RecyclerViewIngredientes : RecyclerView.Adapter<RecyclerViewIngredientes.ViewHolder>() {
+class RecyclerViewIngredients : RecyclerView.Adapter<RecyclerViewIngredients.ViewHolder>() {
 
     var groups: MutableList<IngredientObj> = ArrayList()
     lateinit var context: Context

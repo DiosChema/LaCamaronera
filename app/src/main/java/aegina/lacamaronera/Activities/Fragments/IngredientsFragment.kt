@@ -4,7 +4,7 @@ import aegina.lacamaronera.Activities.Ingredients
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
-import aegina.lacamaronera.RecyclerView.RecyclerViewIngredientes
+import aegina.lacamaronera.RecyclerView.RecyclerViewIngredients
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
@@ -29,7 +29,7 @@ class IngredientsFragment : Fragment() {
     private val urls: Urls = Urls()
     lateinit var progressDialog: ProgressDialog
 
-    lateinit var mViewIngredient : RecyclerViewIngredientes
+    lateinit var mViewIngredient : RecyclerViewIngredients
     lateinit var contextTmp: Context
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -66,7 +66,7 @@ class IngredientsFragment : Fragment() {
 
     private fun createRecyclerView()
     {
-        mViewIngredient = RecyclerViewIngredientes()
+        mViewIngredient = RecyclerViewIngredients()
         val mRecyclerView = InventoryIngredient
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)

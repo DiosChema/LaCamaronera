@@ -17,10 +17,14 @@
     <string name="dish_existence">Existencia</string>
     <string name="dish_measurement">Medida</string>
     <string name="dish_add">Agregar</string>
+    <string name="dish_add_ingredient">Agregar Ingrediente</string>
+    <string name="dish_add_ingredient_title">Cantidad a comsumir</string>
+    <string name="dish_delete">¿Estas seguro que deseas eliminar este platillo?</string>
 
     <string name="ingredient_edit">Editar</string>
     <string name="ingredient_update">Actualizar</string>
     <string name="ingredient_delete">¿Estas seguro que deseas eliminar este ingrediente?</string>
+    <string name="ingredient_delete_error">Ingrediente en uso, favor de remover el ingrediente de los platillos antes de eliminar el ingrediente</string>
 
     <string name="measurement_kg">Kg</string>
     <string name="measurement_lt">Lt</string>

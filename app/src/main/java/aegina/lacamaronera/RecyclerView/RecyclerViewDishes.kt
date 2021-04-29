@@ -61,7 +61,7 @@ class RecyclerViewDishes : RecyclerView.Adapter<RecyclerViewDishes.ViewHolder>()
             itemView.setOnClickListener()
             {
                 val intent = Intent(itemView.context, DishesDetails::class.java).apply {
-                    putExtra("idIngrediente", articulo.idPlatillo)
+                    putExtra("idDish", articulo.idPlatillo)
                 }
                 itemView.context.startActivity(intent)
             }

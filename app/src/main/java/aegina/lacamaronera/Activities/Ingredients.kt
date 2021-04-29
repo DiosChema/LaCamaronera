@@ -19,7 +19,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
-import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
 import java.io.*
@@ -81,7 +80,9 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
             if( ingredientsName.text.length > 2 &&
                 ingredientsDescription.text.length > 4 &&
                 ingredientsExistence.text.isNotEmpty() &&
-                ingredientsPrice.text.isNotEmpty()
+                ingredientsExistence.text.toString() != "." &&
+                ingredientsPrice.text.isNotEmpty() &&
+                ingredientsPrice.text.toString() != "."
             )
             {
                 val ingredientObj = IngredientObj(
@@ -94,7 +95,7 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
                     ArrayList()
                 )
 
-                addDish(ingredientObj)
+                addIngredient(ingredientObj)
             }
 
         }
@@ -114,7 +115,7 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
     }
 
 
-    private fun addDish(ingredientObj: IngredientObj)
+    private fun addIngredient(ingredientObj: IngredientObj)
     {
         val errores = Errores()
 

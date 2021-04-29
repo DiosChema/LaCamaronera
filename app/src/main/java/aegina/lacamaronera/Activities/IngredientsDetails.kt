@@ -96,21 +96,14 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
             {
                 try
                 {
-                    Log.v("TAG", "ENTRE");
                     val body = response.body()?.string()
-                    Log.v("TAG", "ENTRE2");
                     if(body != null && body.isNotEmpty())
                     {
-                        Log.v("TAG", "ENTRE3");
                         val gson = GsonBuilder().create()
-                        Log.v("TAG", "ENTRE4");
                         Log.v("TAG", body.toString());
                         val model = gson.fromJson(body, IngredientObj::class.java)
-                        Log.v("TAG", "ENTRE5");
 
                         ingredientObj = model
-
-                        Log.v("TAG", ingredientObj.nombre);
 
                         runOnUiThread()
                         {
@@ -119,9 +112,13 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
 
                     }
                 }
-                catch (e: java.lang.Exception)
+                catch (e: Exception)
                 {
-                    Log.v("TAG", e.toString());
+                    runOnUiThread()
+                    {
+                        Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
+                    }
+                    finish()
                 }
                 finally
                 {
@@ -222,7 +219,14 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
 
         ingredientsDelete.setOnClickListener()
         {
-            showDialogEliminarArticulo()
+            if(ingredientObj.usoPlatillo.size == 0)
+            {
+                showDialogEliminarArticulo()
+            }
+            else
+            {
+                Toast.makeText(contextTmp, contextTmp.getString(R.string.ingredient_delete_error), Toast.LENGTH_LONG).show()
+            }
         }
 
         dialogSelectPhoto.createDialog(this)
