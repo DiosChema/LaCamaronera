@@ -82,7 +82,6 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
         createProgressDialog()
         getGroups()
         createRecyclerView()
-        //getIngredients()
         dialogIngredients = DialogIngredients()
         dialogIngredients.crearDialogInicial(contextTmp, activityTmp)
 
@@ -128,6 +127,7 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
                     {
                         ingredientsDish.add(IngredientDishObj(ingredientObjTmp.idIngrediente, ingredientObjTmp.existencia))
                     }
+
                     var dishesObj = DishesObj(
                         idDish,
                         dishName.text.toString(),
@@ -441,14 +441,6 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
         dialog.show()
     }
 
-    /*fun getDish(ingredientObj: IngredientObj) {
-        listIngredients.add(ingredientObj)
-        runOnUiThread()
-        {
-            mViewIngredient.notifyDataSetChanged()
-        }
-    }*/
-
     private fun deleteIngredient()
     {
         val errores = Errores()
@@ -661,11 +653,29 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
     }
 
     override fun getIngredient(ingredientObj: IngredientObj) {
-        listIngredients.add(ingredientObj)
+
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
         runOnUiThread()
         {
             mViewIngredient.notifyDataSetChanged()
         }
+    }
+
+    private fun ingredientAlreadyInDish(ingredientObj: IngredientObj): Boolean {
+        var i = 0
+        for(i in 0 until  listIngredients.size)
+        {
+            if(ingredientObj.idIngrediente == listIngredients[i].idIngrediente)
+            {
+                listIngredients[i].existencia += ingredientObj.existencia
+                return true
+            }
+        }
+        return false
     }
 
 }

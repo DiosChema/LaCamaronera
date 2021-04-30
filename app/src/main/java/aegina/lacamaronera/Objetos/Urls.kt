@@ -5,7 +5,8 @@ data class Urls(
     var endPointsGrupo:UrlsGrups,
     var endPointsIngredientes:UrlsIngredients,
     var endPointsImagenes: UrlsImages,
-    var endPointDishes: UrlsDishes
+    var endPointDishes: UrlsDishes,
+    var endPointAssorment: UrlsAssorment
 )
 {
     constructor(): this(
@@ -33,6 +34,10 @@ data class Urls(
             "Inventario/ActualizaPlatillo",
             "Inventario/ConsultaPlatillo",
             "Inventario/BajaPlatillo"
+        ),
+        UrlsAssorment(
+            "Gasto/AltaGastoIngrediente",
+            "Gasto/consultaGasto"
         )
     )
 }
@@ -63,4 +68,9 @@ data class UrlsDishes(
     val endPointActualizarPlatillos:String,
     val endPointConsultaPlatillo:String,
     val endPointBajaPlatillo:String
+)
+
+data class UrlsAssorment(
+    val endPointPostAssorment: String,
+    val endPointGetAssorment: String
 )

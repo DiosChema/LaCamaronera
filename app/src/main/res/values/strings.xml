@@ -8,6 +8,8 @@
 
     <string name="menu_sale">Venta</string>
     <string name="menu_stock">Inventario</string>
+    <string name="menu_assorment">Surtido</string>
+    <string name="menu_assorments">Lista Surtidos</string>
 
     <string name="dish_name">Nombre</string>
     <string name="dish_price">Precio</string>
@@ -39,6 +41,8 @@
     <string name="inventory_add_ingredients">Agregar Ingredientes</string>
     <string name="inventory_add_group">Agregar Grupo</string>
 
+    <string name="assorment_add">Añadir</string>
+    <string name="assorment_finish">Finalizar</string>
 
     <string name="group_add">Agregar Grupo</string>
     <string name="group_add_title">Nombre grupo</string>

@@ -104,8 +104,15 @@ class DialogIngredients : AppCompatDialogFragment()
         dialogAceptar.setOnClickListener {
             if(dialogText.length() > 0 && dialogText.text.toString() != ".")
             {
-                var ingredientObjTmp = listIngredients[position]
-                ingredientObjTmp.existencia = parseDouble(dialogText.text.toString())
+                var ingredientObjTmp = IngredientObj(
+                    listIngredients[position].idIngrediente,
+                    listIngredients[position].nombre,
+                    listIngredients[position].costo,
+                    listIngredients[position].descripcion,
+                    parseDouble(dialogText.text.toString()),
+                    listIngredients[position].unidad,
+                    listIngredients[position].usoPlatillo
+                )
 
                 dialogIngredients.getIngredient(ingredientObjTmp)
                 dialog.dismiss()

@@ -15,6 +15,16 @@
             android:id="@+id/drawerMenuStock"
             android:icon="@drawable/icon_stock"
             android:title="@string/menu_stock" />
+
+        <item
+            android:id="@+id/drawerMenuAssorment"
+            android:icon="@drawable/icon_ingredients"
+            android:title="@string/menu_assorment" />
+
+        <item
+            android:id="@+id/drawerMenuAssorments"
+            android:icon="@drawable/icon_ingredients"
+            android:title="@string/menu_assorments" />
     </group>
 
 </menu>

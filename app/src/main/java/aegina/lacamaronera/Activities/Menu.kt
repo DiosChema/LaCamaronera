@@ -68,6 +68,14 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
                 i.setClass(this, PagerInventory::class.java)
                 startActivity(i)
             }
+            R.id.drawerMenuAssorment -> {
+                i.setClass(this, Assorment::class.java)
+                startActivity(i)
+            }
+            R.id.drawerMenuAssorments -> {
+                i.setClass(this, Assorments::class.java)
+                startActivity(i)
+            }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)

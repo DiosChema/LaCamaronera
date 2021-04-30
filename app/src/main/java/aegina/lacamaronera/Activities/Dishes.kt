@@ -260,12 +260,31 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         dialog.show()
     }
 
-    override fun getIngredient(ingredientObj: IngredientObj) {
-        listIngredients.add(ingredientObj)
+    override fun getIngredient(ingredientObj: IngredientObj)
+    {
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
         runOnUiThread()
         {
             mViewIngredient.notifyDataSetChanged()
         }
+    }
+
+    private fun ingredientAlreadyInDish(ingredientObj: IngredientObj): Boolean
+    {
+        var i = 0
+        for(i in 0 until  listIngredients.size)
+        {
+            if(ingredientObj.idIngrediente == listIngredients[i].idIngrediente)
+            {
+                listIngredients[i].existencia += ingredientObj.existencia
+                return true
+            }
+        }
+        return false
     }
 
     private fun addDish(dishesObj: DishesObj)

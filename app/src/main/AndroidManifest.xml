@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.DishesDetails"></activity>
+        <activity android:name=".Activities.Assorments"></activity>
+        <activity android:name=".Activities.Assorment" />
+        <activity android:name=".Activities.DishesDetails" />
         <activity android:name=".Activities.IngredientsDetails" />
         <activity android:name=".Activities.Ingredients" />
         <activity android:name=".Activities.PagerInventory" />
