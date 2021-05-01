@@ -6,7 +6,8 @@ data class Urls(
     var endPointsIngredientes:UrlsIngredients,
     var endPointsImagenes: UrlsImages,
     var endPointDishes: UrlsDishes,
-    var endPointAssorment: UrlsAssorment
+    var endPointAssorment: UrlsAssorment,
+    var endPointSale: UrlsSale
 )
 {
     constructor(): this(
@@ -38,6 +39,10 @@ data class Urls(
         UrlsAssorment(
             "Gasto/AltaGastoIngrediente",
             "Gasto/consultaGasto"
+        ),
+        UrlsSale(
+            "Venta/AltaVenta",
+            "Venta/ConsultaVenta"
         )
     )
 }
@@ -73,4 +78,9 @@ data class UrlsDishes(
 data class UrlsAssorment(
     val endPointPostAssorment: String,
     val endPointGetAssorment: String
+)
+
+data class UrlsSale(
+    val endPointPostSale: String,
+    val endPointGetSale: String
 )

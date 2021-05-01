@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 
 class DialogGruop : AppCompatDialogFragment() {
 
-    lateinit var dialogGroupInt: DialogGroup
+    lateinit var dialogGroupIntInt: DialogGroupInt
     lateinit var dialogGroup : Dialog
     lateinit var dialogTextTitle : TextView
     lateinit var dialogTextText : EditText
@@ -36,7 +36,7 @@ class DialogGruop : AppCompatDialogFragment() {
         dialogGroup.setCancelable(false)
         dialogGroup.setContentView(R.layout.dialog_group)
 
-        dialogGroupInt = context as DialogGroup
+        dialogGroupIntInt = context as DialogGroupInt
 
         dialogTextTitle = dialogGroup.findViewById<View>(R.id.dialogGroupTitle) as TextView
         dialogTextText = dialogGroup.findViewById<View>(R.id.dialogGroupText) as EditText
@@ -63,11 +63,11 @@ class DialogGruop : AppCompatDialogFragment() {
             if(dialogTextText.length() > 0) {
                 if(textTmp == "")
                 {
-                    dialogGroupInt.newGroup(dialogTextText.text.toString())
+                    dialogGroupIntInt.newGroup(dialogTextText.text.toString())
                 }
                 else
                 {
-                    dialogGroupInt.editGroup(dialogTextText.text.toString(), position)
+                    dialogGroupIntInt.editGroup(dialogTextText.text.toString(), position)
                 }
 
                 view?.let { it1 -> hideSoftkeybard(it1) }
@@ -83,7 +83,7 @@ class DialogGruop : AppCompatDialogFragment() {
 
         dialogGroupDelete.setOnClickListener()
         {
-            dialogGroupInt.deleteGroup(position)
+            dialogGroupIntInt.deleteGroup(position)
             dialogGroup.dismiss()
         }
 
@@ -95,7 +95,7 @@ class DialogGruop : AppCompatDialogFragment() {
         inputMethodManager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 
-    interface DialogGroup {
+    interface DialogGroupInt {
         fun newGroup(text : String)
         fun editGroup(text : String, position: Int)
         fun deleteGroup(position: Int)

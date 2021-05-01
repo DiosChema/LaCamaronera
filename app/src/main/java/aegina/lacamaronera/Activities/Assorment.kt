@@ -1,45 +1,60 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.Dialog.DialogIngredients
+import aegina.lacamaronera.Dialog.DialogNumber
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
 import aegina.lacamaronera.RecyclerView.RecyclerViewAssorment
+import aegina.lacamaronera.RecyclerView.RecyclerViewIngredientsTablet
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
+import java.lang.Double
+import java.lang.Double.parseDouble
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
+class Assorment : AppCompatActivity(),
+    DialogIngredients.DialogIngredientsInt,
+    DialogNumber.DialogNumberInt{
 
     lateinit var assormentIngredientsAmount: TextView
     lateinit var assormentIngredientsTotal: TextView
     lateinit var assormentIngredientsRecyclerView: RecyclerView
+    lateinit var assormentIngredientsListRecyclerView: RecyclerView
     lateinit var assormentIngredientsFinish: Button
     lateinit var assormentIngredientsAdd: Button
 
     lateinit var progressDialog: ProgressDialog
     lateinit var dialogIngredients: DialogIngredients
+    lateinit var dialogNumber: DialogNumber
     private val urls: Urls = Urls()
 
     lateinit var contextTmp: Context
     lateinit var activityTmp: Context
 
     lateinit var mViewIngredient: RecyclerViewAssorment
+    lateinit var recyclerViewIngredients: RecyclerViewIngredientsTablet
     var listIngredients: MutableList<IngredientObj> = ArrayList()
+    var listIngredientsTablet: MutableList<IngredientObj> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +79,8 @@ class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
             assormentIngredientsAdd = findViewById(R.id.assormentIngredientsAdd)
 
             dialogIngredients = DialogIngredients()
-            dialogIngredients.crearDialogInicial(this, this)
+            dialogIngredients.textAssorment(this)
+            dialogIngredients.createDialog(this, this)
 
             assormentIngredientsAdd.setOnClickListener()
             {
@@ -73,7 +89,8 @@ class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
         }
         else
         {
-
+            assormentIngredientsListRecyclerView = findViewById(R.id.assormentIngredientsListRecyclerView)
+            createRecyclerViewIngredients()
         }
 
         assormentIngredientsFinish.setOnClickListener()
@@ -189,7 +206,7 @@ class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
             RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View?, position: Int)
             {
-                //amountDialog(position)
+                amountDialog(position)
             }
 
             override fun onLongItemClick(view: View?, position: Int)
@@ -202,6 +219,77 @@ class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
                 }
             }
         }))
+    }
+
+    private fun createRecyclerViewIngredients()
+    {
+        recyclerViewIngredients = RecyclerViewIngredientsTablet()
+        val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsRecyclerView)
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
+        mRecyclerView.adapter = recyclerViewIngredients
+
+        dialogNumber = DialogNumber()
+        dialogNumber.crearDialog(this,this)
+
+        mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
+            RecyclerItemClickListener.OnItemClickListener {
+            override fun onItemClick(view: View?, position: Int)
+            {
+                dialogNumber.showDialog(position)
+            }
+
+            override fun onLongItemClick(view: View?, position: Int){}
+        }))
+
+        getIngredients()
+    }
+
+    private fun amountDialog(position: Int) {
+        val dialog = Dialog(activityTmp)
+        dialog.setTitle(title)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_assorment)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val dialogAssormentAmount = dialog.findViewById(R.id.dialogAssormentAmount) as EditText
+        val dialogAssormentPrice = dialog.findViewById(R.id.dialogAssormentPrice) as EditText
+        val dialogAssormentDescription = dialog.findViewById(R.id.dialogAssormentDescription) as EditText
+        val dialogAceptar = dialog.findViewById(R.id.dialogNumberAceptar) as Button
+        val dialogCancelar = dialog.findViewById(R.id.dialogNumberCancelar) as Button
+        val dialogAssormentTitulo = dialog.findViewById(R.id.dialogAssormentTitulo) as TextView
+
+        dialogAssormentTitulo.text = contextTmp.getString(R.string.dialog_assorment_title)
+
+        dialogAssormentAmount.setText(listIngredients[position].existencia.toString())
+        dialogAssormentPrice.setText(listIngredients[position].costo.toString())
+        dialogAssormentDescription.setText(listIngredients[position].descripcion)
+
+        dialogAceptar.setOnClickListener {
+            if(dialogAssormentAmount.length() > 0 && dialogAssormentAmount.text.toString() != "." &&
+                dialogAssormentPrice.length() > 0 && dialogAssormentPrice.text.toString() != ".")
+            {
+                listIngredients[position].existencia =
+                    Double.parseDouble(dialogAssormentAmount.text.toString())
+                listIngredients[position].costo =
+                    Double.parseDouble(dialogAssormentPrice.text.toString())
+                listIngredients[position].descripcion =
+                    dialogAssormentDescription.text.toString()
+
+                dialog.dismiss()
+                runOnUiThread()
+                {
+                    mViewIngredient.notifyDataSetChanged()
+                    updateAmountPrices()
+                }
+            }
+        }
+
+        dialogCancelar.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 
@@ -255,5 +343,67 @@ class Assorment : AppCompatActivity(), DialogIngredients.DialogIngredientsInt {
         return false
     }
 
+    override fun number(text: String, position: Int) {
+        val ingredientObj = listIngredientsTablet[position]
+
+        ingredientObj.existencia = parseDouble(text)
+
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
+        runOnUiThread()
+        {
+            updateAmountPrices()
+            mViewIngredient.notifyDataSetChanged()
+        }
+    }
+
+    fun getIngredients()
+    {
+        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread()
+                {
+                    Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onResponse(call: Call, response: Response)
+            {
+                try
+                {
+                    val body = response.body()?.string()
+
+                    if(body != null && body.isNotEmpty())
+                    {
+                        val gson = GsonBuilder().create()
+                        val model = gson.fromJson(body, Array<IngredientObj>::class.java).toList()
+
+                        listIngredientsTablet.clear()
+                        for(ingredientTmp : IngredientObj in model)
+                        {
+                            listIngredientsTablet.add(ingredientTmp)
+                        }
+
+                        runOnUiThread()
+                        {
+                            recyclerViewIngredients.notifyDataSetChanged()
+                        }
+
+                    }
+                }
+                catch (e: Exception){}
+            }
+        })
+
+    }
 
 }

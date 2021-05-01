@@ -1,7 +1,7 @@
 package aegina.lacamaronera.Activities.Fragments
 
 import aegina.lacamaronera.Activities.Dishes
-import aegina.lacamaronera.Activities.Group
+import aegina.lacamaronera.Activities.GroupInt
 import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.fragment_ingredients.*
 import kotlinx.android.synthetic.main.fragment_platillos.*
 import okhttp3.*
 import java.io.IOException
@@ -67,7 +66,7 @@ class DishesFragment : Fragment() {
 
         inventoryAddGroup.setOnClickListener()
         {
-            val intent = Intent(activity, Group::class.java)
+            val intent = Intent(activity, GroupInt::class.java)
             startActivity(intent)
         }
 

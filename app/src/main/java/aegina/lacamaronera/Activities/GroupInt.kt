@@ -26,7 +26,7 @@ import java.io.IOException
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
-class Group : AppCompatActivity(), DialogGruop.DialogGroup {
+class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
 
     lateinit var dialogPhoto: Dialog
     var listGroup: MutableList<GroupObj> = ArrayList()

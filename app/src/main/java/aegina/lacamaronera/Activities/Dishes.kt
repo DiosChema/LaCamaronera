@@ -25,10 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_dishes.*
 import okhttp3.*
-import org.json.JSONException
-import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -76,7 +73,7 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         createRecyclerView()
         //getIngredients()
         dialogIngredients = DialogIngredients()
-        dialogIngredients.crearDialogInicial(contextTmp, activityTmp)
+        dialogIngredients.createDialog(contextTmp, activityTmp)
 
     }
 
@@ -101,6 +98,8 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         dishLinearLayout = findViewById(R.id.dishLinearLayout)
 
         dishLinearLayout.visibility = View.GONE
+
+        dialogIngredients.textDish(this)
 
         dishAdd.setOnClickListener()
         {
@@ -236,7 +235,7 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         val dialogCancelar = dialog.findViewById(R.id.dialogNumberCancelar) as Button
         val dialogTitulo = dialog.findViewById(R.id.dialogNumberTitulo) as TextView
 
-        dialogTitulo.text = contextTmp.getString(R.string.dish_add_ingredient_title)
+        dialogTitulo.text = contextTmp.getString(R.string.dish_add_ingredient_title_dish)
 
         dialogText.setText(listIngredients[position].existencia.toString())
 

@@ -1,10 +1,10 @@
 package aegina.lacamaronera.Dialog
 
-import aegina.lacamaronera.Objetos.IngredientObj
+import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
-import aegina.lacamaronera.RecyclerView.RecyclerViewIngredients
+import aegina.lacamaronera.RecyclerView.RecyclerViewDishes
 import android.app.ActionBar
 import android.app.Activity
 import android.app.Dialog
@@ -23,29 +23,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
-import java.lang.Double.parseDouble
 
-class DialogIngredients: AppCompatDialogFragment()
+class DialogDish: AppCompatDialogFragment()
 {
     lateinit var contextTmp : Context
     val urls: Urls = Urls()
     lateinit var activityTmp: Activity
 
-    lateinit var recyclerViewIngredients: RecyclerViewIngredients
-    lateinit var dialogIngredients: DialogIngredientsInt
+    lateinit var recyclerViewDishes: RecyclerViewDishes
+    lateinit var dialogIngredients: DialogDishInt
     lateinit var dialogIngredientsIngredient: RecyclerView
     lateinit var dialogIngredientsCancel: Button
     lateinit var titleDialog: String
 
     lateinit var dialogArticulos : Dialog
 
-    var listIngredients:MutableList<IngredientObj> = ArrayList()
+    var listIngredients:MutableList<DishesObj> = ArrayList()
 
     fun createDialog(context: Context, activity : Activity)
     {
         contextTmp = context
         activityTmp = activity
-        dialogIngredients = contextTmp as DialogIngredientsInt
+        dialogIngredients = contextTmp as DialogDishInt
 
         dialogArticulos = Dialog(contextTmp)
         dialogArticulos.setCancelable(false)
@@ -57,11 +56,11 @@ class DialogIngredients: AppCompatDialogFragment()
         dialogIngredientsCancel = dialogArticulos.findViewById(R.id.dialogIngredientsCancel) as Button
         dialogIngredientsIngredient = dialogArticulos.findViewById(R.id.dialogIngredientsIngredient) as RecyclerView
 
-        recyclerViewIngredients = RecyclerViewIngredients()
+        recyclerViewDishes = RecyclerViewDishes()
         dialogIngredientsIngredient.setHasFixedSize(true)
         dialogIngredientsIngredient.layoutManager = LinearLayoutManager(contextTmp)
-        recyclerViewIngredients.RecyclerAdapter(listIngredients, contextTmp)
-        dialogIngredientsIngredient.adapter = recyclerViewIngredients
+        recyclerViewDishes.RecyclerAdapter(listIngredients, contextTmp)
+        dialogIngredientsIngredient.adapter = recyclerViewDishes
 
         dialogIngredientsIngredient.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, dialogIngredientsIngredient, object :
             RecyclerItemClickListener.OnItemClickListener {
@@ -81,22 +80,12 @@ class DialogIngredients: AppCompatDialogFragment()
             dialogArticulos.dismiss()
         }
 
-        getIngredients()
+        getDishes()
     }
 
     fun showDialog()
     {
         dialogArticulos.show()
-    }
-
-    fun textDish(contextTmp: Context)
-    {
-        titleDialog = contextTmp.getString(R.string.dish_add_ingredient_title_dish)
-    }
-
-    fun textAssorment(contextTmp: Context)
-    {
-        titleDialog = contextTmp.getString(R.string.dish_add_ingredient_title_assorment)
     }
 
     private fun amountDialog(position: Int) {
@@ -110,22 +99,21 @@ class DialogIngredients: AppCompatDialogFragment()
         val dialogCancelar = dialog.findViewById(R.id.dialogNumberCancelar) as Button
         val dialogTitulo = dialog.findViewById(R.id.dialogNumberTitulo) as TextView
 
-        dialogTitulo.text = titleDialog
+        dialogTitulo.text = contextTmp.getString(R.string.dialog_dish_title)
 
         dialogAceptar.setOnClickListener {
             if(dialogText.length() > 0 && dialogText.text.toString() != ".")
             {
-                var ingredientObjTmp = IngredientObj(
-                    listIngredients[position].idIngrediente,
+                val dishObjTmp = DishesObj(
+                    listIngredients[position].idPlatillo,
                     listIngredients[position].nombre,
-                    listIngredients[position].costo,
-                    "",
-                    parseDouble(dialogText.text.toString()),
-                    listIngredients[position].unidad,
-                    listIngredients[position].usoPlatillo
+                    listIngredients[position].precio,
+                    listIngredients[position].ingredientes,
+                    listIngredients[position].idFamilia,
+                    dialogText.text.toString()
                 )
 
-                dialogIngredients.getIngredient(ingredientObjTmp)
+                dialogIngredients.getDish(dishObjTmp)
                 dialog.dismiss()
                 dialogArticulos.dismiss()
             }
@@ -138,9 +126,9 @@ class DialogIngredients: AppCompatDialogFragment()
         dialog.show()
     }
 
-    fun getIngredients()
+    fun getDishes()
     {
-        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+        val url = urls.url+urls.endPointDishes.endPointConsultarPlatillos
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
@@ -163,17 +151,17 @@ class DialogIngredients: AppCompatDialogFragment()
                     if(body != null && body.isNotEmpty())
                     {
                         val gson = GsonBuilder().create()
-                        val model = gson.fromJson(body, Array<IngredientObj>::class.java).toList()
+                        val model = gson.fromJson(body, Array<DishesObj>::class.java).toList()
 
                         listIngredients.clear()
-                        for(ingredientTmp : IngredientObj in model)
+                        for(ingredientTmp : DishesObj in model)
                         {
                             listIngredients.add(ingredientTmp)
                         }
 
                         activityTmp.runOnUiThread()
                         {
-                            recyclerViewIngredients.notifyDataSetChanged()
+                            recyclerViewDishes.notifyDataSetChanged()
                         }
 
                     }
@@ -184,8 +172,8 @@ class DialogIngredients: AppCompatDialogFragment()
 
     }
 
-    interface DialogIngredientsInt {
-        fun getIngredient(ingredientObj: IngredientObj)
+    interface DialogDishInt {
+        fun getDish(dishSaleObj: DishesObj)
     }
 
 }

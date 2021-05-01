@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@drawable/round_button_blue"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/dialogAssormentTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        style="@style/TitleText"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/dialog_assorment_amount"
+        style="@style/TitleText"
+        android:textAlignment="textStart">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogAssormentAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:importantForAutofill="no"
+            android:text=""
+            style="@style/TitleText"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/dialog_assorment_price"
+        style="@style/TitleText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogAssormentPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:gravity="center_horizontal"
+            android:importantForAutofill="no"
+            android:text=""
+            style="@style/TitleText"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/dialog_assorment_description"
+        style="@style/TitleText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogAssormentDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:inputType="text"
+            android:gravity="center_horizontal"
+            android:importantForAutofill="no"
+            android:text=""
+            style="@style/TitleText"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp">
+
+        <Button
+            android:id="@+id/dialogNumberCancelar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button_white"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@color/black"
+            android:text="@string/dialog_cancel" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/dialogNumberAceptar"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans"
+            android:textColor="@color/black"
+            android:background="@drawable/round_button_white"
+            android:text="@string/dialog_accept" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

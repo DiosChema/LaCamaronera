@@ -60,8 +60,12 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     {
         val i = Intent()
         when (item.itemId) {
-            R.id.drawerMenuEmail -> {
+            R.id.drawerMenuSale -> {
                 i.setClass(this, Sale::class.java)
+                startActivity(i)
+            }
+            R.id.drawerMenuSales -> {
+                i.setClass(this, Sales::class.java)
                 startActivity(i)
             }
             R.id.drawerMenuStock -> {

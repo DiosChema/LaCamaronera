@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="menu_sale">Venta</string>
+    <string name="menu_sales">Ventas</string>
     <string name="menu_stock">Inventario</string>
     <string name="menu_assorment">Surtido</string>
     <string name="menu_assorments">Lista Surtidos</string>
@@ -20,7 +21,8 @@
     <string name="dish_measurement">Medida</string>
     <string name="dish_add">Agregar</string>
     <string name="dish_add_ingredient">Agregar Ingrediente</string>
-    <string name="dish_add_ingredient_title">Cantidad a comsumir</string>
+    <string name="dish_add_ingredient_title_dish">Cantidad a comsumir</string>
+    <string name="dish_add_ingredient_title_assorment">Cantidad a comprar</string>
     <string name="dish_delete">¿Estas seguro que deseas eliminar este platillo?</string>
 
     <string name="ingredient_edit">Editar</string>
@@ -55,5 +57,11 @@
 
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_accept">Aceptar</string>
+
+    <string name="dialog_assorment_title">Editar</string>
+    <string name="dialog_assorment_amount">Cantidad</string>
+    <string name="dialog_assorment_price">Precio</string>
+    <string name="dialog_assorment_description">Descripcion</string>
+    <string name="dialog_dish_title">Platillos</string>
 
 </resources>

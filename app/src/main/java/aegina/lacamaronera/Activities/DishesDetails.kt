@@ -26,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_dishes.*
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
@@ -83,7 +82,8 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
         getGroups()
         createRecyclerView()
         dialogIngredients = DialogIngredients()
-        dialogIngredients.crearDialogInicial(contextTmp, activityTmp)
+        dialogIngredients.textDish(this)
+        dialogIngredients.createDialog(contextTmp, activityTmp)
 
     }
 
@@ -390,7 +390,7 @@ class DishesDetails : AppCompatActivity(), DialogIngredients.DialogIngredientsIn
         val dialogCancelar = dialog.findViewById(R.id.dialogNumberCancelar) as Button
         val dialogTitulo = dialog.findViewById(R.id.dialogNumberTitulo) as TextView
 
-        dialogTitulo.text = contextTmp.getString(R.string.dish_add_ingredient_title)
+        dialogTitulo.text = contextTmp.getString(R.string.dish_add_ingredient_title_dish)
 
         dialogText.setText(listIngredients[position].existencia.toString())
 

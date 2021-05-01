@@ -7,9 +7,14 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/drawerMenuEmail"
+            android:id="@+id/drawerMenuSale"
             android:icon="@drawable/icon_sale"
             android:title="@string/menu_sale" />
+
+        <item
+            android:id="@+id/drawerMenuSales"
+            android:icon="@drawable/icon_sale"
+            android:title="@string/menu_sales" />
 
         <item
             android:id="@+id/drawerMenuStock"
