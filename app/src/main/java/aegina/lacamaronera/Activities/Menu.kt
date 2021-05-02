@@ -4,6 +4,8 @@ import aegina.lacamaronera.R
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -12,7 +14,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 
 
-class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class Menu : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener{
 
     lateinit var drawerLayout: DrawerLayout
 
@@ -20,8 +23,51 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+        draweMenu()
+        assignResources()
+    }
+
+    private fun assignResources() {
+        val menuSale = findViewById<ImageView>(R.id.menuSale)
+        menuSale.setOnClickListener()
+        {
+            val intent = Intent(this, Sale::class.java)
+            startActivity(intent)
+        }
+
+        val menuSales = findViewById<ImageView>(R.id.menuSales)
+        menuSales.setOnClickListener()
+        {
+            val intent = Intent(this, Sales::class.java)
+            startActivity(intent)
+        }
+
+        val menuInventory = findViewById<ImageView>(R.id.menuInventory)
+        menuInventory.setOnClickListener()
+        {
+            val intent = Intent(this, PagerInventory::class.java)
+            startActivity(intent)
+        }
+
+        val menuAssorment = findViewById<ImageView>(R.id.menuAssorment)
+        menuAssorment.setOnClickListener()
+        {
+            val intent = Intent(this, Assorment::class.java)
+            startActivity(intent)
+        }
+
+        val menuAssorments = findViewById<ImageView>(R.id.menuAssorments)
+        menuAssorments.setOnClickListener()
+        {
+            val intent = Intent(this, Assorments::class.java)
+            startActivity(intent)
+        }
 
 
+    }
+
+    private fun draweMenu()
+    {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
@@ -41,7 +87,6 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
         drawerLayout.addDrawerListener(toggle)
 
         toggle.syncState()
-
     }
 
     override fun onBackPressed()
@@ -58,32 +103,11 @@ class Menu : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListene
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean
     {
-        val i = Intent()
-        when (item.itemId) {
-            R.id.drawerMenuSale -> {
-                i.setClass(this, Sale::class.java)
-                startActivity(i)
-            }
-            R.id.drawerMenuSales -> {
-                i.setClass(this, Sales::class.java)
-                startActivity(i)
-            }
-            R.id.drawerMenuStock -> {
-                i.setClass(this, PagerInventory::class.java)
-                startActivity(i)
-            }
-            R.id.drawerMenuAssorment -> {
-                i.setClass(this, Assorment::class.java)
-                startActivity(i)
-            }
-            R.id.drawerMenuAssorments -> {
-                i.setClass(this, Assorments::class.java)
-                startActivity(i)
-            }
-        }
+        val drawerMenu = DrawerMenu()
+
+        drawerMenu.menu(item, this)
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
 }

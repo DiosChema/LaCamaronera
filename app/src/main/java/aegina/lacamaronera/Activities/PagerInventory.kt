@@ -1,7 +1,7 @@
 package aegina.lacamaronera.Activities
 
-import aegina.lacamaronera.Activities.Fragments.DishesFragment
-import aegina.lacamaronera.Activities.Fragments.IngredientsFragment
+import aegina.lacamaronera.Fragments.DishesFragment
+import aegina.lacamaronera.Fragments.IngredientsFragment
 import aegina.lacamaronera.R
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

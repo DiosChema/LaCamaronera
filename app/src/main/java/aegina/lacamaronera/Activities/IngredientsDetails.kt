@@ -1,6 +1,6 @@
 package aegina.lacamaronera.Activities
 
-import aegina.lacamaronera.Activities.General.Photo
+import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
 import aegina.lacamaronera.Objetos.Errores
 import aegina.lacamaronera.Objetos.IngredientObj
@@ -32,7 +32,6 @@ import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Double
-import java.lang.Long
 import java.util.ArrayList
 
 class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhotoInt {

@@ -1,18 +1,18 @@
 package aegina.lacamaronera.RecyclerView
 
-import aegina.lacamaronera.Activities.IngredientsDetails
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+
 
 class RecyclerViewIngredientsTablet : RecyclerView.Adapter<RecyclerViewIngredientsTablet.ViewHolder>() {
 

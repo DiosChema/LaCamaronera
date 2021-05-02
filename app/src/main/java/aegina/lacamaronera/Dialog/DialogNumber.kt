@@ -38,6 +38,7 @@ class DialogNumber: AppCompatDialogFragment()
             if(dialogText.length() > 0 && dialogText.text.toString() != ".")
             {
                 dialogGroupInt.number(dialogText.text.toString(), position)
+                dialogNumber.dismiss()
             }
         }
 

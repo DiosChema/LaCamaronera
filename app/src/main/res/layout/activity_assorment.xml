@@ -129,46 +129,4 @@
             style="@style/Button" />
 
     </LinearLayout>
-
-
-    <!--<LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="15dp">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight=".2" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ventaTerminarVenta"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/icon_cashregister"
-            android:layout_gravity="center_horizontal"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#ebece7"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ventaNuevoArticulo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/anadirarticulo"
-            android:layout_gravity="center_horizontal"
-            app:civ_border_width="2dp"
-            app:civ_border_color="#ebece7"/>
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight=".2" />
-
-    </LinearLayout >-->
 </LinearLayout >

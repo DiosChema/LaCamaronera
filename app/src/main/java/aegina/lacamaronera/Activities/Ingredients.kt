@@ -1,6 +1,6 @@
 package aegina.lacamaronera.Activities
 
-import aegina.lacamaronera.Activities.General.Photo
+import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
 import aegina.lacamaronera.Objetos.Errores
 import aegina.lacamaronera.Objetos.IngredientObj

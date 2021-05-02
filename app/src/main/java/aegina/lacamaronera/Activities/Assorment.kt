@@ -16,11 +16,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
@@ -224,9 +222,9 @@ class Assorment : AppCompatActivity(),
     private fun createRecyclerViewIngredients()
     {
         recyclerViewIngredients = RecyclerViewIngredientsTablet()
-        val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsRecyclerView)
+        val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsListRecyclerView)
         mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
+        mRecyclerView.layoutManager = GridLayoutManager(this, 3, RecyclerView.HORIZONTAL, false)
         recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
         mRecyclerView.adapter = recyclerViewIngredients
 

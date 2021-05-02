@@ -12,9 +12,15 @@ import android.app.ProgressDialog
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_platillos.*
 import okhttp3.*
@@ -23,8 +29,10 @@ import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 
-class Assorments : AppCompatActivity() {
+class Assorments : AppCompatActivity(),
+    NavigationView.OnNavigationItemSelectedListener{
 
+    lateinit var drawerLayout: DrawerLayout
     lateinit var mViewAssorments: RecyclerViewAssorments
     lateinit var progressDialog: ProgressDialog
 
@@ -41,6 +49,7 @@ class Assorments : AppCompatActivity() {
         assignResources()
         createProgressDialog()
         getAssorments()
+        draweMenu()
     }
 
     private fun assignResources() {
@@ -130,4 +139,49 @@ class Assorments : AppCompatActivity() {
         })
 
     }
+
+    private fun draweMenu()
+    {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        var navigationView: NavigationView = findViewById(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+
+        toggle.syncState()
+    }
+
+    override fun onBackPressed()
+    {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+        {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        else
+        {
+            super.onBackPressed()
+        }
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val drawerMenu = DrawerMenu()
+
+        drawerMenu.menu(item, this)
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
 }

@@ -19,6 +19,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
@@ -77,6 +78,7 @@ class Sale : AppCompatActivity(),
             assormentIngredientsAdd = findViewById(R.id.assormentIngredientsAdd)
 
             dialogIngredients = DialogDish()
+
             dialogIngredients.createDialog(this, this)
 
             assormentIngredientsAdd.setOnClickListener()
@@ -221,9 +223,9 @@ class Sale : AppCompatActivity(),
     private fun createRecyclerViewIngredients()
     {
         recyclerViewIngredients = RecyclerViewDishesTablet()
-        val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsRecyclerView)
+        val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsListRecyclerView)
         mRecyclerView.setHasFixedSize(true)
-        mRecyclerView.layoutManager = LinearLayoutManager(this)
+        mRecyclerView.layoutManager = GridLayoutManager(this, 3, RecyclerView.HORIZONTAL, false)
         recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
         mRecyclerView.adapter = recyclerViewIngredients
 

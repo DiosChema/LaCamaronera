@@ -1,4 +1,4 @@
-package aegina.lacamaronera.Activities.Fragments
+package aegina.lacamaronera.Fragments
 
 import aegina.lacamaronera.Activities.Ingredients
 import aegina.lacamaronera.Objetos.IngredientObj

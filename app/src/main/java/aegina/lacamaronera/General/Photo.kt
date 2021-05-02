@@ -1,4 +1,4 @@
-package aegina.lacamaronera.Activities.General
+package aegina.lacamaronera.General
 
 import android.Manifest
 import android.app.Activity
