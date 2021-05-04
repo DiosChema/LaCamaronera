@@ -6,11 +6,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="menu">Menu</string>
     <string name="menu_sale">Venta</string>
     <string name="menu_sales">Ventas</string>
     <string name="menu_stock">Inventario</string>
     <string name="menu_assorment">Surtido</string>
-    <string name="menu_assorments">Lista Surtidos</string>
+    <string name="menu_assorments">Surtidos</string>
 
     <string name="dish_name">Nombre</string>
     <string name="dish_price">Precio</string>
@@ -38,13 +39,18 @@
     <string name="inventory_dish">Platillos</string>
     <string name="inventory_ingredients">Ingredientes</string>
 
-
     <string name="inventory_add_dish">Agregar Platillo</string>
     <string name="inventory_add_ingredients">Agregar Ingredientes</string>
     <string name="inventory_add_group">Agregar Grupo</string>
 
+    <string name="sale_order">Orden</string>
+
+
     <string name="assorment_add">Añadir</string>
     <string name="assorment_finish">Finalizar</string>
+
+    <string name="assorments_total">Total</string>
+    <string name="assorments_list">Lista</string>
 
     <string name="group_add">Agregar Grupo</string>
     <string name="group_add_title">Nombre grupo</string>
@@ -54,6 +60,8 @@
     <string name="wait">Favor de esperar un momento</string>
     <string name="error">Ocurrio un error, favor de esperar un momento</string>
 
+
+    <string name="item_amount">Cant:</string>
 
     <string name="dialog_cancel">Cancelar</string>
     <string name="dialog_accept">Aceptar</string>

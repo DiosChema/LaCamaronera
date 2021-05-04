@@ -1,33 +1,37 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Objetos.AssormentIngredientObj
 import aegina.lacamaronera.Objetos.AssormentListObj
-import aegina.lacamaronera.Objetos.AssormentObj
-import aegina.lacamaronera.Objetos.IngredientObj
+import aegina.lacamaronera.Objetos.DishSaleObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
-import aegina.lacamaronera.RecyclerView.RecyclerViewAssorments
-import aegina.lacamaronera.RecyclerView.RecyclerViewDishes
+import aegina.lacamaronera.RecyclerView.*
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
-import kotlinx.android.synthetic.main.fragment_platillos.*
 import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
 
 class Assorments : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener{
@@ -35,16 +39,28 @@ class Assorments : AppCompatActivity(),
     lateinit var drawerLayout: DrawerLayout
     lateinit var mViewAssorments: RecyclerViewAssorments
     lateinit var progressDialog: ProgressDialog
+    lateinit var mViewAssormentsItems: RecyclerViewAssormentIngredient
+
+    lateinit var assormentsTitle: TextView
+    lateinit var assormentsDate: TextView
+    lateinit var assormentsTotal: TextView
 
     private val urls: Urls = Urls()
     lateinit var contextTmp: Context
     lateinit var activityTmp: Activity
 
     var listAssorments = ArrayList<AssormentListObj>()
+    var listAssormentsIngredient = ArrayList<AssormentIngredientObj>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorments)
+
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
         assignResources()
         createProgressDialog()
@@ -67,6 +83,72 @@ class Assorments : AppCompatActivity(),
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
         mViewAssorments.RecyclerAdapter(listAssorments, contextTmp)
         mRecyclerView.adapter = mViewAssorments
+
+        if(!resources.getBoolean(R.bool.portrait_only))
+        {
+            assormentsTitle = findViewById(R.id.assormentsTitle)
+            assormentsDate = findViewById(R.id.assormentsDate)
+            assormentsTotal = findViewById(R.id.assormentsTotal)
+
+            mViewAssormentsItems = RecyclerViewAssormentIngredient()
+            val mRecyclerViewIngedient = findViewById<RecyclerView>(R.id.assormentsRecyclerViewItems)
+            mRecyclerViewIngedient.setHasFixedSize(true)
+            mRecyclerViewIngedient.layoutManager = LinearLayoutManager(contextTmp)
+            mViewAssormentsItems.RecyclerAdapter(listAssormentsIngredient, contextTmp)
+            mRecyclerViewIngedient.adapter = mViewAssormentsItems
+
+            mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerViewIngedient, object :
+                RecyclerItemClickListener.OnItemClickListener {
+                override fun onItemClick(view: View?, position: Int)
+                {
+                    runOnUiThread()
+                    {
+                        mViewAssorments.notifyItemChanged(mViewAssorments.selected_position)
+                        mViewAssorments.selected_position = position
+                        mViewAssorments.notifyItemChanged(mViewAssorments.selected_position)
+
+
+                    }
+
+                    fillSale(listAssorments[position])
+                }
+
+                override fun onLongItemClick(view: View?, position: Int)
+                {
+                    fillSale(listAssorments[position])
+                }
+            }))
+        }
+    }
+
+    private fun fillSale(assormentListObj: AssormentListObj)
+    {
+        val simpleDate = SimpleDateFormat("dd/MM/yy HH:mm")
+        val simpleDateHours = SimpleDateFormat("HH:mm:ss")
+
+        val assormentsLinearLayout = findViewById<LinearLayout>(R.id.assormentsLinearLayout)
+
+        if(assormentsLinearLayout.visibility == View.INVISIBLE)
+        {
+            assormentsLinearLayout.visibility = View.VISIBLE
+        }
+        assormentsTitle.text = assormentListObj.idGasto.toString()
+        assormentsDate.text = simpleDate.format(assormentListObj.fecha)
+        assormentsTotal.text = assormentListObj.totalGasto.toString()
+
+        listAssormentsIngredient.clear()
+
+        for(assormentIngredientObjTmp: AssormentIngredientObj in assormentListObj.ingredientes)
+        {
+            listAssormentsIngredient.add(assormentIngredientObjTmp)
+        }
+
+        runOnUiThread()
+        {
+            mViewAssormentsItems.notifyDataSetChanged()
+        }
+
+
     }
 
     fun createProgressDialog()
@@ -143,6 +225,7 @@ class Assorments : AppCompatActivity(),
     private fun draweMenu()
     {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.menu_assorments)
         setSupportActionBar(toolbar)
 
         var navigationView: NavigationView = findViewById(R.id.navigation_view)

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right|bottom"
+    android:columnCount="4"
+    android:orientation="vertical"
+    android:background="@drawable/black_border"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/dialogEnterNumberText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TitleText"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
+        android:background="#ededed"
+        android:elevation="2dp"/>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:columnCount="4"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialogEnterNumberOne"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberTwo"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberThree"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberDelete"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="←" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberFour"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="4" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberFive"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="5" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberSix"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="6" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberCancel"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberSeven"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="7" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberEight"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="8" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberNine"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="9" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberEnter"
+            android:layout_gravity="fill"
+            android:layout_rowSpan="3"
+            android:text="Enter" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberCero"
+            android:layout_height="60dp"
+            android:layout_columnSpan="2"
+            android:layout_gravity="fill"
+            android:text="0" />
+
+        <Button
+            android:id="@+id/dialogEnterNumberDot"
+            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:text="." />
+
+
+    </GridLayout>
+
+</LinearLayout>

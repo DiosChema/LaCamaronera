@@ -5,6 +5,7 @@ import aegina.lacamaronera.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +13,17 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
 
     var groups: MutableList<SaleDishObj> = ArrayList()
     lateinit var context: Context
+    var selected_position = -1
 
     fun RecyclerAdapter(listGroups: MutableList<SaleDishObj>, context: Context) {
         this.groups = listGroups
@@ -27,12 +32,19 @@ class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
+        holder.itemView.setBackgroundColor(if(selected_position == position) holder.itemView.context.resources.getColor(R.color.light_gray) else Color.TRANSPARENT)
+
         holder.bind(item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ViewHolder(layoutInflater.inflate(R.layout.item_assorments,parent,false))
+
+        val inflatedView : View = layoutInflater.inflate(R.layout.item_assorments, parent,false)
+
+        return ViewHolder(inflatedView)
+
+        //return ViewHolder(layoutInflater.inflate(R.layout.item_assorments,parent,false))
     }
 
     override fun getItemId(position: Int): Long {
@@ -57,26 +69,29 @@ class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
 
         fun bind(articulo: SaleDishObj) {
 
-            val mViewVentas = RecyclerViewSaleDish()
-            val mRecyclerView : RecyclerView = itemAssormentRecyclerView
-            mRecyclerView.setHasFixedSize(true)
-            mRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
-            var llenarRecyclerView = true
+            if(itemView.resources.getBoolean(R.bool.portrait_only))
+            {
+                val mViewVentas = RecyclerViewSaleDish()
+                val mRecyclerView : RecyclerView = itemAssormentRecyclerView
+                mRecyclerView.setHasFixedSize(true)
+                mRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
+                var llenarRecyclerView = true
 
-            itemView.setOnClickListener {
-                if(llenarRecyclerView)
-                {
-                    if (itemView.context != null) {
-                        mViewVentas.RecyclerAdapter(articulo.platillos.toMutableList(), itemView.context)
+                itemView.setOnClickListener {
+                    if(llenarRecyclerView)
+                    {
+                        if (itemView.context != null) {
+                            mViewVentas.RecyclerAdapter(articulo.platillos.toMutableList(), itemView.context)
+                        }
+                        mRecyclerView.adapter = mViewVentas
+                        llenarRecyclerView = false
                     }
-                    mRecyclerView.adapter = mViewVentas
-                    llenarRecyclerView = false
-                }
 
-                if(itemAssormentView.visibility == View.VISIBLE) {
-                    hideMenu()
-                } else {
-                    showMenu()
+                    if(itemAssormentView.visibility == View.VISIBLE) {
+                        hideMenu()
+                    } else {
+                        showMenu()
+                    }
                 }
             }
 

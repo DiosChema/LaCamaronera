@@ -2,6 +2,7 @@ package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.R
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageButton
@@ -23,6 +24,13 @@ class Menu : AppCompatActivity(),
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
+
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         draweMenu()
         assignResources()
     }
@@ -69,6 +77,7 @@ class Menu : AppCompatActivity(),
     private fun draweMenu()
     {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.menu)
         setSupportActionBar(toolbar)
 
         var navigationView: NavigationView = findViewById(R.id.navigation_view)

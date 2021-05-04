@@ -12,6 +12,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -42,6 +43,12 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_group)
+
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
         createRecyclerView()
         assignResources()

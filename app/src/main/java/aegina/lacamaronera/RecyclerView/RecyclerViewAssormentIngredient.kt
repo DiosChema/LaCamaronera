@@ -4,6 +4,7 @@ import aegina.lacamaronera.Objetos.AssormentIngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,16 +47,16 @@ class RecyclerViewAssormentIngredient : RecyclerView.Adapter<RecyclerViewAssorme
         val url = Urls()
         var itemAssormentIngredientPhoto = view.findViewById(R.id.itemAssormentIngredientPhoto) as ImageView
         var itemAssormentIngredientPrice = view.findViewById(R.id.itemAssormentIngredientPrice) as TextView
-        var itemAssormentIngredientAmount = view.findViewById(R.id.itemAssormentIngredientAmount) as TextView
+        var itemAssormentIngredientName = view.findViewById(R.id.itemAssormentIngredientName) as TextView
         var itemAssormentIngredientTotal = view.findViewById(R.id.itemAssormentIngredientTotal) as TextView
 
         fun bind(articulo: AssormentIngredientObj) {
-            itemAssormentIngredientAmount.text = articulo.cantidad.toString()
-            itemAssormentIngredientPrice.text = articulo.precio.toString()
+            itemAssormentIngredientName.text = articulo.nombre
+            val textTmp = articulo.cantidad.toString() + " x " + articulo.precio
+            itemAssormentIngredientPrice.text = textTmp
             itemAssormentIngredientTotal.text = (articulo.cantidad * articulo.precio).toString()
             val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+".jpeg"
             itemAssormentIngredientPhoto.loadUrl(url)
-
         }
 
         fun ImageView.loadUrl(url: String) {

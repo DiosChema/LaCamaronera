@@ -1,7 +1,7 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.Dialog.DialogDish
-import aegina.lacamaronera.Dialog.DialogNumber
+import aegina.lacamaronera.Dialog.DialogEnterNumber
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.*
@@ -9,7 +9,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
-import android.content.res.Configuration
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -33,9 +33,9 @@ import java.util.*
 
 class Sale : AppCompatActivity(),
     DialogDish.DialogDishInt,
-    DialogNumber.DialogNumberInt{
+    DialogEnterNumber.DialogEnterNumberInt,
+    RecyclerViewSale.SaleInt{
 
-    lateinit var assormentIngredientsAmount: TextView
     lateinit var assormentIngredientsTotal: TextView
     lateinit var assormentIngredientsRecyclerView: RecyclerView
     lateinit var assormentIngredientsListRecyclerView: RecyclerView
@@ -44,7 +44,7 @@ class Sale : AppCompatActivity(),
 
     lateinit var progressDialog: ProgressDialog
     lateinit var dialogIngredients: DialogDish
-    lateinit var dialogNumber: DialogNumber
+    lateinit var dialogNumber: DialogEnterNumber
     private val urls: Urls = Urls()
 
     lateinit var contextTmp: Context
@@ -59,6 +59,12 @@ class Sale : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorment)
 
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         assignResources()
         createProgressDialog()
         updateAmountPrices()
@@ -70,10 +76,9 @@ class Sale : AppCompatActivity(),
 
         assormentIngredientsRecyclerView = findViewById(R.id.assormentIngredientsRecyclerView)
         assormentIngredientsFinish = findViewById(R.id.assormentIngredientsFinish)
-        assormentIngredientsAmount = findViewById(R.id.assormentIngredientsAmount)
         assormentIngredientsTotal = findViewById(R.id.assormentIngredientsTotal)
 
-        if(!isTablet(contextTmp))
+        if(resources.getBoolean(R.bool.portrait_only))
         {
             assormentIngredientsAdd = findViewById(R.id.assormentIngredientsAdd)
 
@@ -88,6 +93,9 @@ class Sale : AppCompatActivity(),
         }
         else
         {
+            val assormentIngredientsList = findViewById<TextView>(R.id.assormentIngredientsList)
+            assormentIngredientsList.text = getText(R.string.sale_order)
+
             assormentIngredientsListRecyclerView = findViewById(R.id.assormentIngredientsListRecyclerView)
             createRecyclerViewIngredients()
         }
@@ -120,6 +128,7 @@ class Sale : AppCompatActivity(),
                     listIngredients[i].idPlatillo,
                     listIngredients[i].precio,
                     parseDouble(listIngredients[i].descripcion),
+                    listIngredients[i].nombre,
                     listIngredients[i].ingredientes)
             )
         }
@@ -201,23 +210,7 @@ class Sale : AppCompatActivity(),
         mViewIngredient.RecyclerAdapter(listIngredients, this)
         mRecyclerView.adapter = mViewIngredient
 
-        mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
-            RecyclerItemClickListener.OnItemClickListener {
-            override fun onItemClick(view: View?, position: Int)
-            {
-                amountDialog(position)
-            }
 
-            override fun onLongItemClick(view: View?, position: Int)
-            {
-                listIngredients.removeAt(position)
-                runOnUiThread()
-                {
-                    mViewIngredient.notifyDataSetChanged()
-                    updateAmountPrices()
-                }
-            }
-        }))
     }
 
     private fun createRecyclerViewIngredients()
@@ -229,14 +222,25 @@ class Sale : AppCompatActivity(),
         recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
         mRecyclerView.adapter = recyclerViewIngredients
 
-        dialogNumber = DialogNumber()
-        dialogNumber.crearDialog(this,this)
+        dialogNumber = DialogEnterNumber()
+        dialogNumber.createDialog(this,this)
 
         mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
             RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View?, position: Int)
             {
-                dialogNumber.showDialog(position)
+                //dialogNumber.showDialog(position)
+                val ingredientObj = listIngredientsTablet[position]
+
+                ingredientObj.descripcion = "1.0"
+
+                listIngredients.add(ingredientObj)
+
+                runOnUiThread()
+                {
+                    updateAmountPrices()
+                    mViewIngredient.notifyDataSetChanged()
+                }
             }
 
             override fun onLongItemClick(view: View?, position: Int){}
@@ -289,17 +293,8 @@ class Sale : AppCompatActivity(),
         dialog.show()
     }
 
-
-    fun isTablet(context: Context): Boolean
-    {
-        return ((context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
-    }
-
     private fun updateAmountPrices()
     {
-        var amountTmp = listIngredients.size
         var pricesTmp = 0.0
 
         for(i in 0 until listIngredients.size)
@@ -307,8 +302,7 @@ class Sale : AppCompatActivity(),
             pricesTmp += (parseDouble(listIngredients[i].descripcion) * listIngredients[i].precio)
         }
 
-        assormentIngredientsAmount.text = amountTmp.toString()
-        assormentIngredientsTotal.text = pricesTmp.toString()
+        assormentIngredientsTotal.text = getString(R.string.assorments_total) + " " + pricesTmp.toString()
     }
 
     private fun ingredientAlreadyInDish(dishSaleObj: DishesObj): Boolean
@@ -323,23 +317,6 @@ class Sale : AppCompatActivity(),
             }
         }
         return false
-    }
-
-    override fun number(text: String, position: Int) {
-        val ingredientObj = listIngredientsTablet[position]
-
-        ingredientObj.descripcion = text
-
-        if(!ingredientAlreadyInDish(ingredientObj))
-        {
-            listIngredients.add(ingredientObj)
-        }
-
-        runOnUiThread()
-        {
-            updateAmountPrices()
-            mViewIngredient.notifyDataSetChanged()
-        }
     }
 
     fun getDishes()
@@ -399,6 +376,48 @@ class Sale : AppCompatActivity(),
             updateAmountPrices()
             mViewIngredient.notifyDataSetChanged()
         }
+    }
+
+    override fun getNumber(number: kotlin.Double, position: Int) {
+        val ingredientObj = listIngredientsTablet[position]
+
+        ingredientObj.descripcion = number.toString()
+
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
+        runOnUiThread()
+        {
+            updateAmountPrices()
+            mViewIngredient.notifyDataSetChanged()
+        }
+    }
+
+    override fun actualizarNumero(value: Int, position: Int) {
+        val dishesObj = DishesObj(
+            listIngredients[position].idPlatillo,
+            listIngredients[position].nombre,
+            listIngredients[position].precio,
+            listIngredients[position].ingredientes,
+            listIngredients[position].idFamilia,
+            (parseDouble(listIngredients[position].descripcion) + value).toString()
+        )
+
+        listIngredients[position] = dishesObj
+
+        if(parseDouble(listIngredients[position].descripcion) <= 0.0)
+        {
+            listIngredients.removeAt(position)
+        }
+
+        runOnUiThread()
+        {
+            mViewIngredient.notifyDataSetChanged()
+            updateAmountPrices()
+        }
+
     }
 
 }

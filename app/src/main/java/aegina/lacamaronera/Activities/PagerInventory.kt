@@ -3,6 +3,7 @@ package aegina.lacamaronera.Activities
 import aegina.lacamaronera.Fragments.DishesFragment
 import aegina.lacamaronera.Fragments.IngredientsFragment
 import aegina.lacamaronera.R
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -18,6 +19,12 @@ class PagerInventory : AppCompatActivity() {
     {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pager_inventory)
+
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
         asignarFragments()
     }

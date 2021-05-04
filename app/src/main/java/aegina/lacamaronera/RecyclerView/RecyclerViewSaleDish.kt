@@ -47,12 +47,13 @@ class RecyclerViewSaleDish : RecyclerView.Adapter<RecyclerViewSaleDish.ViewHolde
         val url = Urls()
         var itemAssormentIngredientPhoto = view.findViewById(R.id.itemAssormentIngredientPhoto) as ImageView
         var itemAssormentIngredientPrice = view.findViewById(R.id.itemAssormentIngredientPrice) as TextView
-        var itemAssormentIngredientAmount = view.findViewById(R.id.itemAssormentIngredientAmount) as TextView
+        var itemAssormentIngredientName = view.findViewById(R.id.itemAssormentIngredientName) as TextView
         var itemAssormentIngredientTotal = view.findViewById(R.id.itemAssormentIngredientTotal) as TextView
 
         fun bind(articulo: DishSaleObj) {
-            itemAssormentIngredientAmount.text = articulo.cantidad.toString()
-            itemAssormentIngredientPrice.text = articulo.precio.toString()
+            itemAssormentIngredientName.text = articulo.nombre
+            val textTmp = articulo.cantidad.toString() + " x $" + articulo.precio
+            itemAssormentIngredientPrice.text = textTmp
             itemAssormentIngredientTotal.text = (articulo.cantidad * articulo.precio).toString()
             val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "pl" + articulo.idPlatillo+".jpeg"
             itemAssormentIngredientPhoto.loadUrl(url)

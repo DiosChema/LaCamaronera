@@ -6,6 +6,7 @@ import aegina.lacamaronera.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
 
     var groups: MutableList<AssormentListObj> = ArrayList()
     lateinit var context: Context
+    var selected_position = -1
 
     fun RecyclerAdapter(listGroups: MutableList<AssormentListObj>, context: Context) {
         this.groups = listGroups
@@ -28,6 +30,7 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
+        holder.itemView.setBackgroundColor(if(selected_position == position) holder.itemView.context.resources.getColor(R.color.light_gray) else Color.TRANSPARENT)
         holder.bind(item)
     }
 
@@ -64,22 +67,23 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
             mRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
             var llenarRecyclerView = true
 
-
-
-            itemView.setOnClickListener {
-                if(llenarRecyclerView)
-                {
-                    if (itemView.context != null) {
-                        mViewVentas.RecyclerAdapter(articulo.ingredientes.toMutableList(), itemView.context)
+            if(itemView.resources.getBoolean(R.bool.portrait_only))
+            {
+                itemView.setOnClickListener {
+                    if(llenarRecyclerView)
+                    {
+                        if (itemView.context != null) {
+                            mViewVentas.RecyclerAdapter(articulo.ingredientes.toMutableList(), itemView.context)
+                        }
+                        mRecyclerView.adapter = mViewVentas
+                        llenarRecyclerView = false
                     }
-                    mRecyclerView.adapter = mViewVentas
-                    llenarRecyclerView = false
-                }
 
-                if(itemAssormentView.visibility == View.VISIBLE) {
-                    hideMenu()
-                } else {
-                    showMenu()
+                    if(itemAssormentView.visibility == View.VISIBLE) {
+                        hideMenu()
+                    } else {
+                        showMenu()
+                    }
                 }
             }
 

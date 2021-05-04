@@ -1,5 +1,7 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Dialog.DialogDish
+import aegina.lacamaronera.Dialog.DialogEnterNumber
 import aegina.lacamaronera.Dialog.DialogIngredients
 import aegina.lacamaronera.Dialog.DialogNumber
 import aegina.lacamaronera.Objetos.*
@@ -7,10 +9,12 @@ import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
 import aegina.lacamaronera.RecyclerView.RecyclerViewAssorment
 import aegina.lacamaronera.RecyclerView.RecyclerViewIngredientsTablet
+import aegina.lacamaronera.RecyclerView.RecyclerViewSale
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -32,9 +36,9 @@ import java.util.*
 
 class Assorment : AppCompatActivity(),
     DialogIngredients.DialogIngredientsInt,
-    DialogNumber.DialogNumberInt{
+    DialogEnterNumber.DialogEnterNumberInt,
+    RecyclerViewAssorment.AssormentInt{
 
-    lateinit var assormentIngredientsAmount: TextView
     lateinit var assormentIngredientsTotal: TextView
     lateinit var assormentIngredientsRecyclerView: RecyclerView
     lateinit var assormentIngredientsListRecyclerView: RecyclerView
@@ -43,7 +47,7 @@ class Assorment : AppCompatActivity(),
 
     lateinit var progressDialog: ProgressDialog
     lateinit var dialogIngredients: DialogIngredients
-    lateinit var dialogNumber: DialogNumber
+    lateinit var dialogNumber: DialogEnterNumber
     private val urls: Urls = Urls()
 
     lateinit var contextTmp: Context
@@ -58,6 +62,12 @@ class Assorment : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorment)
 
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
         assignResources()
         createProgressDialog()
         updateAmountPrices()
@@ -69,10 +79,9 @@ class Assorment : AppCompatActivity(),
 
         assormentIngredientsRecyclerView = findViewById(R.id.assormentIngredientsRecyclerView)
         assormentIngredientsFinish = findViewById(R.id.assormentIngredientsFinish)
-        assormentIngredientsAmount = findViewById(R.id.assormentIngredientsAmount)
         assormentIngredientsTotal = findViewById(R.id.assormentIngredientsTotal)
 
-        if(!isTablet(contextTmp))
+        if(resources.getBoolean(R.bool.portrait_only))
         {
             assormentIngredientsAdd = findViewById(R.id.assormentIngredientsAdd)
 
@@ -87,6 +96,9 @@ class Assorment : AppCompatActivity(),
         }
         else
         {
+            val assormentIngredientsList = findViewById<TextView>(R.id.assormentIngredientsList)
+            assormentIngredientsList.text = getText(R.string.assorments_list)
+
             assormentIngredientsListRecyclerView = findViewById(R.id.assormentIngredientsListRecyclerView)
             createRecyclerViewIngredients()
         }
@@ -119,6 +131,7 @@ class Assorment : AppCompatActivity(),
                     listIngredients[i].idIngrediente,
                     listIngredients[i].costo,
                     listIngredients[i].existencia,
+                    listIngredients[i].nombre,
                     listIngredients[i].descripcion)
             )
         }
@@ -199,24 +212,6 @@ class Assorment : AppCompatActivity(),
         mRecyclerView.layoutManager = LinearLayoutManager(this)
         mViewIngredient.RecyclerAdapter(listIngredients, this)
         mRecyclerView.adapter = mViewIngredient
-
-        mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
-            RecyclerItemClickListener.OnItemClickListener {
-            override fun onItemClick(view: View?, position: Int)
-            {
-                amountDialog(position)
-            }
-
-            override fun onLongItemClick(view: View?, position: Int)
-            {
-                listIngredients.removeAt(position)
-                runOnUiThread()
-                {
-                    mViewIngredient.notifyDataSetChanged()
-                    updateAmountPrices()
-                }
-            }
-        }))
     }
 
     private fun createRecyclerViewIngredients()
@@ -228,14 +223,25 @@ class Assorment : AppCompatActivity(),
         recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
         mRecyclerView.adapter = recyclerViewIngredients
 
-        dialogNumber = DialogNumber()
-        dialogNumber.crearDialog(this,this)
+        dialogNumber = DialogEnterNumber()
+        dialogNumber.createDialog(this,this)
 
         mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
             RecyclerItemClickListener.OnItemClickListener {
             override fun onItemClick(view: View?, position: Int)
             {
-                dialogNumber.showDialog(position)
+                //dialogNumber.showDialog(position)
+                val ingredientObj = listIngredientsTablet[position]
+
+                ingredientObj.existencia = 1.0
+
+                listIngredients.add(ingredientObj)
+
+                runOnUiThread()
+                {
+                    updateAmountPrices()
+                    mViewIngredient.notifyDataSetChanged()
+                }
             }
 
             override fun onLongItemClick(view: View?, position: Int){}
@@ -244,7 +250,7 @@ class Assorment : AppCompatActivity(),
         getIngredients()
     }
 
-    private fun amountDialog(position: Int) {
+    /*private fun amountDialog(position: Int) {
         val dialog = Dialog(activityTmp)
         dialog.setTitle(title)
         dialog.setCancelable(false)
@@ -288,34 +294,10 @@ class Assorment : AppCompatActivity(),
         }
 
         dialog.show()
-    }
-
-
-    fun isTablet(context: Context): Boolean
-    {
-        return ((context.resources.configuration.screenLayout
-                and Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE)
-    }
-
-    override fun getIngredient(ingredientObj: IngredientObj)
-    {
-
-        if(!ingredientAlreadyInDish(ingredientObj))
-        {
-            listIngredients.add(ingredientObj)
-        }
-
-        runOnUiThread()
-        {
-            updateAmountPrices()
-            mViewIngredient.notifyDataSetChanged()
-        }
-    }
+    }*/
 
     private fun updateAmountPrices()
     {
-        var amountTmp = listIngredients.size
         var pricesTmp = 0.0
 
         for(i in 0 until listIngredients.size)
@@ -323,7 +305,6 @@ class Assorment : AppCompatActivity(),
             pricesTmp += (listIngredients[i].existencia * listIngredients[i].costo)
         }
 
-        assormentIngredientsAmount.text = amountTmp.toString()
         assormentIngredientsTotal.text = pricesTmp.toString()
     }
 
@@ -339,23 +320,6 @@ class Assorment : AppCompatActivity(),
             }
         }
         return false
-    }
-
-    override fun number(text: String, position: Int) {
-        val ingredientObj = listIngredientsTablet[position]
-
-        ingredientObj.existencia = parseDouble(text)
-
-        if(!ingredientAlreadyInDish(ingredientObj))
-        {
-            listIngredients.add(ingredientObj)
-        }
-
-        runOnUiThread()
-        {
-            updateAmountPrices()
-            mViewIngredient.notifyDataSetChanged()
-        }
     }
 
     fun getIngredients()
@@ -402,6 +366,62 @@ class Assorment : AppCompatActivity(),
             }
         })
 
+    }
+
+    override fun getNumber(number: kotlin.Double, position: Int) {
+        val ingredientObj = listIngredientsTablet[position]
+
+        ingredientObj.existencia = number
+
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
+        runOnUiThread()
+        {
+            updateAmountPrices()
+            mViewIngredient.notifyDataSetChanged()
+        }
+    }
+
+    override fun actualizarNumero(value: Int, position: Int) {
+        val ingredientObj = IngredientObj(
+            listIngredients[position].idIngrediente,
+            listIngredients[position].nombre,
+            listIngredients[position].costo,
+            listIngredients[position].descripcion,
+            listIngredients[position].existencia + value,
+            listIngredients[position].unidad,
+            listIngredients[position].usoPlatillo
+        )
+
+        listIngredients[position] = ingredientObj
+
+        if(listIngredients[position].existencia <= 0.0)
+        {
+            listIngredients.removeAt(position)
+        }
+
+        runOnUiThread()
+        {
+            mViewIngredient.notifyDataSetChanged()
+            updateAmountPrices()
+        }
+
+    }
+
+    override fun getIngredient(ingredientObj: IngredientObj) {
+        if(!ingredientAlreadyInDish(ingredientObj))
+        {
+            listIngredients.add(ingredientObj)
+        }
+
+        runOnUiThread()
+        {
+            updateAmountPrices()
+            mViewIngredient.notifyDataSetChanged()
+        }
     }
 
 }
