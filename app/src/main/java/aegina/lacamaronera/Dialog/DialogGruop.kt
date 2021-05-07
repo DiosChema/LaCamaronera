@@ -50,13 +50,14 @@ class DialogGruop : AppCompatDialogFragment() {
         if(textTmp == "")
         {
             dialogGroupDelete.visibility = View.INVISIBLE
+            dialogTextTitle.text = contextTmp.getString(R.string.group_add_title)
         }
         else
         {
             dialogGroupDelete.visibility = View.VISIBLE
+            dialogTextTitle.text = contextTmp.getString(R.string.group_edit_dialog)
         }
 
-        dialogTextTitle.text = contextTmp.getString(R.string.group_add_title)
         dialogTextText.setText(textTmp)
 
         dialogTextAccept.setOnClickListener {

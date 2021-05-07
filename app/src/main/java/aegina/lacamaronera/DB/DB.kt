@@ -1,6 +1,4 @@
 package aegina.lacamaronera.DB
-/*
-package com.tutorialesprogramacionya.proyecto019
 
 import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
@@ -9,11 +7,18 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory
 
 class DB(context: Context, name: String, factory: CursorFactory?, version: Int) : SQLiteOpenHelper(context, name, factory, version) {
 
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("create table ventas(idVenta int primary key, descripcion text, precio real)")
+    override fun onCreate(db: SQLiteDatabase)
+    {
+        db.execSQL("create table Ventas(idVenta INTEGER primary key AUTOINCREMENT, fecha text)")
+        db.execSQL("create table Platillos(idVenta INTEGER primary key, idPlatillo INTEGER, cantidad real, nombre text, precio real)")
+        db.execSQL("create table Ingredientes(idVenta INTEGER primary key, idIngrediente INTEGER, cantidad real)")
+        db.execSQL("create table PlatillosRespaldo(idPlatillo INTEGER primary key, nombre text, precio real, idFamilia INTEGER, descripcion text)")
+        db.execSQL("create table IngredientesRespaldo(idPlatillo INTEGER primary key, idIngrediente INTEGER, cantidad real)")
+
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int)
+    {
 
     }
-}*/
+}

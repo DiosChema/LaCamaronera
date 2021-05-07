@@ -80,6 +80,7 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         createRecyclerView()
         //getIngredients()
         dialogIngredients = DialogIngredients()
+        dialogIngredients.textDish(this)
         dialogIngredients.createDialog(contextTmp, activityTmp)
 
     }
@@ -106,7 +107,6 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
 
         dishLinearLayout.visibility = View.GONE
 
-        dialogIngredients.textDish(this)
 
         dishAdd.setOnClickListener()
         {

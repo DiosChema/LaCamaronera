@@ -2,13 +2,13 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background2"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background"
+        android:layout_height="wrap_content"
+        android:background="@color/background2"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -47,6 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
+                    android:background="@drawable/text_round"
                     style="@style/TitleText">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +66,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/password"
-                    style="@style/TitleText">
+                    android:background="@drawable/text_round"
+                    style="@style/TitleText"
+                    android:layout_marginTop="5dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/loginPassword"

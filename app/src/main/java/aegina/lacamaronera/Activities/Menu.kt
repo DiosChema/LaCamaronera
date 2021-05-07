@@ -1,11 +1,15 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.DB.Query
+import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +17,20 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.gson.GsonBuilder
+import okhttp3.*
+import java.io.IOException
+import java.lang.Exception
+import kotlin.collections.ArrayList
 
 
 class Menu : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener{
 
     lateinit var drawerLayout: DrawerLayout
+    lateinit var progressDialog: ProgressDialog
+    lateinit var contextTmp: Context
+    lateinit var activityTmp: Context
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -33,9 +45,15 @@ class Menu : AppCompatActivity(),
 
         draweMenu()
         assignResources()
+        createProgressDialog()
+        uploadSales()
     }
 
     private fun assignResources() {
+
+        contextTmp = this
+        activityTmp = this
+
         val menuSale = findViewById<ImageView>(R.id.menuSale)
         menuSale.setOnClickListener()
         {
@@ -71,7 +89,87 @@ class Menu : AppCompatActivity(),
             startActivity(intent)
         }
 
+    }
 
+    fun createProgressDialog()
+    {
+        progressDialog = ProgressDialog(this)
+        progressDialog.setMessage(this.getString(R.string.wait))
+        progressDialog.setCancelable(false)
+    }
+
+    private fun uploadSales()
+    {
+        val query = Query()
+
+        val sales = query.getLocalSales(this)
+        if(!sales.isEmpty())
+        {
+            addDishes(sales)
+        }
+    }
+
+    private fun addDishes(sales: ArrayList<SaleObj>)
+    {
+        val urls = Urls()
+        val errores = Errores()
+
+        val url = urls.url+urls.endPointSale.endPointPostSales
+
+        val dishesTmp = UploadDishesObj(sales)
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+        val jsonTutPretty: String = gsonPretty.toJson(dishesTmp)
+
+        val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonTutPretty)
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .build()
+
+        progressDialog.show()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException)
+            {
+                progressDialog.dismiss()
+            }
+            override fun onResponse(call: Call, response: Response) {
+                val body = response.body()?.string()
+
+                try
+                {
+                    if(body != null && body.isNotEmpty())
+                    {
+                        val gson = GsonBuilder().create()
+                        val respuesta = gson.fromJson(body, ResponseObj::class.java)
+
+                        if(respuesta.status == 0)
+                        {
+                            runOnUiThread()
+                            {
+                                val query = Query()
+                                query.cleanDishes(contextTmp)
+                            }
+                        }
+                        else
+                        {
+                            val errores = Errores()
+                            errores.procesarErrorMensaje(contextTmp, activityTmp as Activity, respuesta)
+                        }
+                    }
+                }
+                catch(e: Exception)
+                {
+                    errores.procesarError(contextTmp, activityTmp as Activity)
+                }
+                finally
+                {
+                    progressDialog.dismiss()
+                }
+            }
+        })
     }
 
     private fun draweMenu()

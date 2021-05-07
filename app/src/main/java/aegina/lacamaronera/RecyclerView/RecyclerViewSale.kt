@@ -58,7 +58,7 @@ class RecyclerViewSale : RecyclerView.Adapter<RecyclerViewSale.ViewHolder>() {
 
         fun bind(articulo: DishesObj) {
             itemAssormentIngredientName.text = articulo.nombre
-            itemAssormentIngredientPrice.text = "$" + articulo.precio.toString()
+            itemAssormentIngredientPrice.text = articulo.descripcion + " X $" + articulo.precio.toString()
             itemAssormentIngredientTotal.text = (parseDouble(articulo.descripcion) * articulo.precio).toString()
             val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "pl" + articulo.idPlatillo+".jpeg"
             itemAssormentIngredientAmount.text = articulo.descripcion

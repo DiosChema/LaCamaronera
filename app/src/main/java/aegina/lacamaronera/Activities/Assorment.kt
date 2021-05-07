@@ -19,12 +19,18 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
@@ -37,8 +43,10 @@ import java.util.*
 class Assorment : AppCompatActivity(),
     DialogIngredients.DialogIngredientsInt,
     DialogEnterNumber.DialogEnterNumberInt,
-    RecyclerViewAssorment.AssormentInt{
+    RecyclerViewAssorment.AssormentInt,
+    NavigationView.OnNavigationItemSelectedListener{
 
+    lateinit var drawerLayout: DrawerLayout
     lateinit var assormentIngredientsTotal: TextView
     lateinit var assormentIngredientsRecyclerView: RecyclerView
     lateinit var assormentIngredientsListRecyclerView: RecyclerView
@@ -68,6 +76,7 @@ class Assorment : AppCompatActivity(),
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
+        draweMenu()
         assignResources()
         createProgressDialog()
         updateAmountPrices()
@@ -116,6 +125,30 @@ class Assorment : AppCompatActivity(),
         progressDialog = ProgressDialog(this)
         progressDialog.setMessage(this.getString(R.string.wait))
         progressDialog.setCancelable(false)
+    }
+
+    private fun draweMenu()
+    {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.menu_assorment)
+        setSupportActionBar(toolbar)
+
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+
+        toggle.syncState()
     }
 
     private fun addAssorment()
@@ -412,10 +445,8 @@ class Assorment : AppCompatActivity(),
     }
 
     override fun getIngredient(ingredientObj: IngredientObj) {
-        if(!ingredientAlreadyInDish(ingredientObj))
-        {
-            listIngredients.add(ingredientObj)
-        }
+        
+        listIngredients.add(ingredientObj)
 
         runOnUiThread()
         {
@@ -423,5 +454,15 @@ class Assorment : AppCompatActivity(),
             mViewIngredient.notifyDataSetChanged()
         }
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val drawerMenu = DrawerMenu()
+
+        drawerMenu.menu(item, this, this)
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
 
 }

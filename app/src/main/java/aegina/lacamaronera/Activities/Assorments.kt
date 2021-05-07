@@ -1,8 +1,9 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Dialog.DialogDate
+import aegina.lacamaronera.Dialog.DialogSearch
 import aegina.lacamaronera.Objetos.AssormentIngredientObj
 import aegina.lacamaronera.Objetos.AssormentListObj
-import aegina.lacamaronera.Objetos.DishSaleObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.*
@@ -10,17 +11,15 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,9 +31,13 @@ import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Assorments : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener{
+    NavigationView.OnNavigationItemSelectedListener,
+    DialogSearch.DialogSearchInt,
+    DialogDate.DialogDateInt{
 
     lateinit var drawerLayout: DrawerLayout
     lateinit var mViewAssorments: RecyclerViewAssorments
@@ -44,13 +47,19 @@ class Assorments : AppCompatActivity(),
     lateinit var assormentsTitle: TextView
     lateinit var assormentsDate: TextView
     lateinit var assormentsTotal: TextView
+    lateinit var assormentsSearch: ImageButton
 
     private val urls: Urls = Urls()
     lateinit var contextTmp: Context
     lateinit var activityTmp: Activity
 
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+
     var listAssorments = ArrayList<AssormentListObj>()
     var listAssormentsIngredient = ArrayList<AssormentIngredientObj>()
+
+    lateinit var dialogDate: DialogDate
+    lateinit var dialogSearch: DialogSearch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +73,21 @@ class Assorments : AppCompatActivity(),
 
         assignResources()
         createProgressDialog()
-        getAssorments()
         draweMenu()
+        createDialogDate()
+        createDialogSearch()
+        dialogDate.assignInitialsDates()
+        getAssorments()
+    }
+
+    private fun createDialogSearch() {
+        dialogSearch = DialogSearch()
+        dialogSearch.createWindow(this, this)
+    }
+
+    private fun createDialogDate() {
+        dialogDate = DialogDate()
+        dialogDate.createWindow(this)
     }
 
     private fun assignResources() {
@@ -73,6 +95,12 @@ class Assorments : AppCompatActivity(),
         activityTmp = this
 
         createRecyclerView()
+        val assormentsSearch: ImageButton = findViewById(R.id.assormentsSearch)
+
+        assormentsSearch.setOnClickListener()
+        {
+            dialogSearch.showDialog()
+        }
     }
 
     private fun createRecyclerView()
@@ -164,6 +192,8 @@ class Assorments : AppCompatActivity(),
 
         val jsonObject = JSONObject()
         try {
+            jsonObject.put("fechaInicial", dateFormat.format(dialogSearch.initialDate))
+            jsonObject.put("fechaFinal", dateFormat.format(dialogSearch.finalDate))
         } catch (e: JSONException)
         {
             e.printStackTrace()
@@ -228,7 +258,7 @@ class Assorments : AppCompatActivity(),
         toolbar.setTitle(R.string.menu_assorments)
         setSupportActionBar(toolbar)
 
-        var navigationView: NavigationView = findViewById(R.id.navigation_view)
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener(this)
 
         drawerLayout = findViewById(R.id.drawer_layout)
@@ -261,10 +291,40 @@ class Assorments : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val drawerMenu = DrawerMenu()
 
-        drawerMenu.menu(item, this)
+        drawerMenu.menu(item, this, this)
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun getInitialDate() {
+        dialogSearch.assignInitialText(dialogDate.getInitialDateText())
+        dialogSearch.initialDate = dialogDate.fechaInicial
+    }
+
+    override fun getFinalDate() {
+        dialogSearch.assignFinalText(dialogDate.getFinalDateText())
+        dialogSearch.finalDate = dialogDate.fechaFinal
+    }
+
+    override fun getDate() {
+        dialogSearch.assignInitialText(dialogDate.getInitialDateText())
+        dialogSearch.assignFinalText(dialogDate.getFinalDateText())
+
+        dialogSearch.initialDate = dialogDate.fechaInicial
+        dialogSearch.finalDate = dialogDate.fechaFinal
+    }
+
+    override fun updateInitialDate() {
+        dialogDate.abrirDialogFechaInicial(dialogSearch.initialDate, dialogSearch.finalDate)
+    }
+
+    override fun updateFinalDate() {
+        dialogDate.abrirDialogFechaFinal(dialogSearch.initialDate, dialogSearch.finalDate)
+    }
+
+    override fun search() {
+        getAssorments()
     }
 
 }

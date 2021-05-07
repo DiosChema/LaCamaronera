@@ -41,7 +41,7 @@
 
     <string name="inventory_add_dish">Agregar Platillo</string>
     <string name="inventory_add_ingredients">Agregar Ingredientes</string>
-    <string name="inventory_add_group">Agregar Grupo</string>
+    <string name="inventory_add_group">Grupos</string>
 
     <string name="sale_order">Orden</string>
 
@@ -54,8 +54,31 @@
 
     <string name="group_add">Agregar Grupo</string>
     <string name="group_add_title">Nombre grupo</string>
+    <string name="group_edit_dialog">Nuevo Nombre</string>
 
     <string name="dialog_photo_title">Método de captura</string>
+
+    <string name="dialog_search_title">Filtros</string>
+
+    <string name="dialogSelectDateTittle">Seleccionar Fecha</string>
+    <string name="dialogSelectDateToday">Hoy</string>
+    <string name="dialogSelectDateWeek">Semana Pasada</string>
+    <string name="dialogSelectDateMoth">Este mes</string>
+    <string name="dialogSelectDateInitial">Selecciona la fecha inicial</string>
+    <string name="dialogSelectDateFinal">Selecciona la fecha final</string>
+
+    <string name="moth_enero">Enero</string>
+    <string name="moth_febrero">Febrero</string>
+    <string name="moth_marzo">Marzo</string>
+    <string name="moth_abril">Abril</string>
+    <string name="moth_mayo">Mayo</string>
+    <string name="moth_junio">Junio</string>
+    <string name="moth_julio">Julio</string>
+    <string name="moth_agosto">Agosto</string>
+    <string name="moth_septiempre">Septiembre</string>
+    <string name="moth_octubre">Octubre</string>
+    <string name="moth_noviembre">Noviembre</string>
+    <string name="moth_diciembre">Diciembre</string>
 
     <string name="wait">Favor de esperar un momento</string>
     <string name="error">Ocurrio un error, favor de esperar un momento</string>
@@ -71,5 +94,7 @@
     <string name="dialog_assorment_price">Precio</string>
     <string name="dialog_assorment_description">Descripcion</string>
     <string name="dialog_dish_title">Platillos</string>
+    <string name="languaje">1</string>
+
 
 </resources>

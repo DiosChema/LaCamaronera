@@ -58,10 +58,10 @@ class Sales : AppCompatActivity(),
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
+        draweMenu()
         assignResources()
         createProgressDialog()
         getSales()
-        draweMenu()
     }
 
     private fun assignResources() {
@@ -220,6 +220,7 @@ class Sales : AppCompatActivity(),
     private fun draweMenu()
     {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.menu_sale)
         setSupportActionBar(toolbar)
 
         var navigationView: NavigationView = findViewById(R.id.navigation_view)
@@ -255,7 +256,7 @@ class Sales : AppCompatActivity(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val drawerMenu = DrawerMenu()
 
-        drawerMenu.menu(item, this)
+        drawerMenu.menu(item, this, this)
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

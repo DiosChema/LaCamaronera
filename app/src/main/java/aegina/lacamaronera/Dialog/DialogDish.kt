@@ -1,5 +1,6 @@
 package aegina.lacamaronera.Dialog
 
+import aegina.lacamaronera.DB.Query
 import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -139,7 +140,8 @@ class DialogDish: AppCompatDialogFragment()
             override fun onFailure(call: Call, e: IOException) {
                 activityTmp.runOnUiThread()
                 {
-                    Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
+                    //Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
+                    getLocalDishes(contextTmp)
                 }
             }
             override fun onResponse(call: Call, response: Response)
@@ -162,6 +164,7 @@ class DialogDish: AppCompatDialogFragment()
                         activityTmp.runOnUiThread()
                         {
                             recyclerViewDishes.notifyDataSetChanged()
+                            insertDishes(listIngredients)
                         }
 
                     }
@@ -170,6 +173,26 @@ class DialogDish: AppCompatDialogFragment()
             }
         })
 
+    }
+
+    private fun insertDishes(dishesTmp: MutableList<DishesObj>)
+    {
+        val query = Query()
+
+        query.insertDishes(contextTmp, dishesTmp)
+    }
+
+    private fun getLocalDishes(contextTmp: Context) {
+        val query = Query()
+
+        val dishesTmp = query.getDishes(contextTmp)
+
+        listIngredients.clear()
+        for(dishesObjTmp: DishesObj in dishesTmp)
+        {
+            listIngredients.add(dishesObjTmp)
+        }
+        recyclerViewDishes.notifyDataSetChanged()
     }
 
     interface DialogDishInt {

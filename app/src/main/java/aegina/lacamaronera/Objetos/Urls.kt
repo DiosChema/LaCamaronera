@@ -42,7 +42,8 @@ data class Urls(
         ),
         UrlsSale(
             "Venta/AltaVenta",
-            "Venta/ConsultaVenta"
+            "Venta/ConsultaVenta",
+            "Venta/AltaVariasVentas"
         )
     )
 }
@@ -82,5 +83,6 @@ data class UrlsAssorment(
 
 data class UrlsSale(
     val endPointPostSale: String,
-    val endPointGetSale: String
+    val endPointGetSale: String,
+    val endPointPostSales: String
 )

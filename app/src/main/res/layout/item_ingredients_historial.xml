@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/itemIngredientHistorialPhoto"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@android:drawable/ic_menu_camera"
+            app:civ_border_width="2dp"
+            app:civ_border_color="#ebece7"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="10dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/itemIngredientHistorialName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleText"
+                android:maxLines="1"
+                tools:text="BOTELLA"/>
+
+            <TextView
+                android:id="@+id/itemIngredientHistorialPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TitleText"
+                android:textSize="18sp"
+                android:maxLines="1"
+                tools:text="BOTELLA"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/itemIngredientHistorialTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TitleText"
+            android:maxLines="1"
+            tools:text="$100"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/border_bottom"
+        android:layout_marginTop="1dp">
+    </TextView>
+
+</LinearLayout>
+

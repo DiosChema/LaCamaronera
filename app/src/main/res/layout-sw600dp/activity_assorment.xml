@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,99 +11,146 @@
     android:background="@color/white">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2.9">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assormentIngredientsListRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"/>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/light_gray"/>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1.40"
-        android:orientation="vertical"
-        android:background="@color/background"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:gravity="center_horizontal">
-
-        <TextView
-            android:id="@+id/assormentIngredientsList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/menu_sale"
-            style="@style/TitleText"
-            android:visibility="gone"/>
-
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            app:srcCompat="@drawable/camaron" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assormentIngredientsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:layout_marginTop="15dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.9"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/home_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:elevation="4dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="4dp"
+                    android:background="@color/tool_bar_background"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assormentIngredientsListRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/light_gray"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.40"
+            android:orientation="vertical"
+            android:background="@color/background"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/assormentIngredientsList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/menu_sale"
+                style="@style/TitleText"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right">
+                android:elevation="4dp"
+                android:background="@color/tool_bar_background">
 
-                <TextView
-                    android:id="@+id/assormentIngredientsTotal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/open_sans"
-                    android:textColor="@color/black"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    app:drawableStartCompat="@drawable/icon_money" />
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:srcCompat="@drawable/camaron"/>
+
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
 
-            <Button
-                android:id="@+id/assormentIngredientsFinish"
-                style="@style/Button"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assormentIngredientsRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_blue"
-                android:text="@string/assorment_finish"
-                android:layout_marginBottom="15dp"/>
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:layout_marginTop="15dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:id="@+id/assormentIngredientsTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans"
+                        android:textColor="@color/black"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:layout_gravity="center_vertical"
+                        app:drawableStartCompat="@drawable/icon_money" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/assormentIngredientsFinish"
+                    style="@style/Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_blue"
+                    android:text="@string/assorment_finish"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-</LinearLayout >
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/drawer_menu"/>
+
+</androidx.drawerlayout.widget.DrawerLayout >

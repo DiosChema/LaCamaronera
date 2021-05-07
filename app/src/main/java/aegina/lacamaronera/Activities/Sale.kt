@@ -1,5 +1,6 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.DB.Query
 import aegina.lacamaronera.Dialog.DialogDish
 import aegina.lacamaronera.Dialog.DialogEnterNumber
 import aegina.lacamaronera.Objetos.*
@@ -14,14 +15,20 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import java.io.IOException
@@ -34,8 +41,10 @@ import java.util.*
 class Sale : AppCompatActivity(),
     DialogDish.DialogDishInt,
     DialogEnterNumber.DialogEnterNumberInt,
-    RecyclerViewSale.SaleInt{
+    RecyclerViewSale.SaleInt,
+    NavigationView.OnNavigationItemSelectedListener{
 
+    lateinit var drawerLayout: DrawerLayout
     lateinit var assormentIngredientsTotal: TextView
     lateinit var assormentIngredientsRecyclerView: RecyclerView
     lateinit var assormentIngredientsListRecyclerView: RecyclerView
@@ -65,6 +74,7 @@ class Sale : AppCompatActivity(),
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
+        draweMenu()
         assignResources()
         createProgressDialog()
         updateAmountPrices()
@@ -108,6 +118,30 @@ class Sale : AppCompatActivity(),
         createRecyclerView()
     }
 
+    private fun draweMenu()
+    {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        toolbar.setTitle(R.string.menu_sales)
+        setSupportActionBar(toolbar)
+
+        val navigationView: NavigationView = findViewById(R.id.navigation_view)
+        navigationView.setNavigationItemSelectedListener(this)
+
+        drawerLayout = findViewById(R.id.drawer_layout)
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+
+        toggle.syncState()
+    }
+
     fun createProgressDialog()
     {
         progressDialog = ProgressDialog(this)
@@ -126,17 +160,18 @@ class Sale : AppCompatActivity(),
             listAssorment.add(
                 DishSaleObj(
                     listIngredients[i].idPlatillo,
-                    listIngredients[i].precio,
                     parseDouble(listIngredients[i].descripcion),
+                    listIngredients[i].precio,
                     listIngredients[i].nombre,
-                    listIngredients[i].ingredientes)
+                    listIngredients[i].ingredientes
+                )
             )
         }
 
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         val currentDate = sdf.format(Date())
 
-        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString())
+        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString(), 1)
 
         val url = urls.url+urls.endPointSale.endPointPostSale
 
@@ -155,8 +190,21 @@ class Sale : AppCompatActivity(),
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                progressDialog.dismiss()
-                errores.procesarError(contextTmp, activityTmp as Activity)
+
+                runOnUiThread()
+                {
+                    try
+                    {
+                        postDatabase(saleObj)
+                    }
+                    catch (e: Exception){}
+                    finally
+                    {
+                        progressDialog.dismiss()
+                    }
+
+                }
+
             }
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body()?.string()
@@ -193,6 +241,22 @@ class Sale : AppCompatActivity(),
                 }
             }
         })
+    }
+
+    private fun postDatabase(saleObj: SaleObj) {
+
+        val query = Query()
+
+        if(query.insertSale(contextTmp, saleObj))
+        {
+            clearScreen()
+        }
+        else
+        {
+            val errores = Errores()
+            errores.procesarError(contextTmp, activityTmp as Activity)
+        }
+
     }
 
     private fun clearScreen() {
@@ -332,7 +396,8 @@ class Sale : AppCompatActivity(),
             override fun onFailure(call: Call, e: IOException) {
                 runOnUiThread()
                 {
-                    Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
+                    getLocalDishes()
+                    //Toast.makeText(contextTmp, contextTmp.getString(R.string.error), Toast.LENGTH_LONG).show()
                 }
             }
             override fun onResponse(call: Call, response: Response)
@@ -355,6 +420,7 @@ class Sale : AppCompatActivity(),
                         runOnUiThread()
                         {
                             recyclerViewIngredients.notifyDataSetChanged()
+                            insertDishes(listIngredientsTablet)
                         }
 
                     }
@@ -365,11 +431,32 @@ class Sale : AppCompatActivity(),
 
     }
 
-    override fun getDish(dishSaleObj: DishesObj) {
-        if(!ingredientAlreadyInDish(dishSaleObj))
+    private fun getLocalDishes() {
+        val query = Query()
+
+        val dishesTmp = query.getDishes(this)
+
+        listIngredientsTablet.clear()
+
+        for(dishesObjTmp: DishesObj in dishesTmp)
         {
-            listIngredients.add(dishSaleObj)
+            listIngredientsTablet.add(dishesObjTmp)
         }
+
+        recyclerViewIngredients.notifyDataSetChanged()
+    }
+
+    private fun insertDishes(dishesTmp: MutableList<DishesObj>)
+    {
+        val query = Query()
+
+        query.insertDishes(contextTmp, dishesTmp)
+    }
+
+    override fun getDish(dishSaleObj: DishesObj)
+    {
+
+        listIngredients.add(dishSaleObj)
 
         runOnUiThread()
         {
@@ -418,6 +505,15 @@ class Sale : AppCompatActivity(),
             updateAmountPrices()
         }
 
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val drawerMenu = DrawerMenu()
+
+        drawerMenu.menu(item, this, this)
+
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 
 }

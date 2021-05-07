@@ -30,7 +30,7 @@ class RecyclerViewSaleDish : RecyclerView.Adapter<RecyclerViewSaleDish.ViewHolde
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return ViewHolder(layoutInflater.inflate(R.layout.item_assorment_ingredient,parent,false))
+        return ViewHolder(layoutInflater.inflate(R.layout.item_ingredients_historial,parent,false))
     }
 
     override fun getItemId(position: Int): Long {
@@ -45,10 +45,10 @@ class RecyclerViewSaleDish : RecyclerView.Adapter<RecyclerViewSaleDish.ViewHolde
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val url = Urls()
-        var itemAssormentIngredientPhoto = view.findViewById(R.id.itemAssormentIngredientPhoto) as ImageView
-        var itemAssormentIngredientPrice = view.findViewById(R.id.itemAssormentIngredientPrice) as TextView
-        var itemAssormentIngredientName = view.findViewById(R.id.itemAssormentIngredientName) as TextView
-        var itemAssormentIngredientTotal = view.findViewById(R.id.itemAssormentIngredientTotal) as TextView
+        var itemAssormentIngredientPhoto = view.findViewById(R.id.itemIngredientHistorialPhoto) as ImageView
+        var itemAssormentIngredientPrice = view.findViewById(R.id.itemIngredientHistorialPrice) as TextView
+        var itemAssormentIngredientName = view.findViewById(R.id.itemIngredientHistorialName) as TextView
+        var itemAssormentIngredientTotal = view.findViewById(R.id.itemIngredientHistorialTotal) as TextView
 
         fun bind(articulo: DishSaleObj) {
             itemAssormentIngredientName.text = articulo.nombre
