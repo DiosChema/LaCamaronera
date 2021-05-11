@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Dishes"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,7 +109,9 @@
             android:id="@+id/dishAddIngredient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/dish_add_ingredient" />
+            android:text="@string/dish_add_ingredient"
+            android:background="@drawable/button_blue"
+            style="@style/Button"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/dishIngredients"

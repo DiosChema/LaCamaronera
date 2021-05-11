@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/round_button_blue"
+    android:background="@drawable/black_border"
     android:layout_marginTop="10dp"
     android:layout_marginLeft="15dp"
     android:layout_marginStart="15dp"
@@ -42,7 +42,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:srcCompat="@android:drawable/ic_menu_gallery"
-            android:background="@color/light_blue"/>
+            android:background="@color/transparent"/>
 
         <View
             android:layout_width="0dp"
@@ -57,7 +57,7 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:srcCompat="@android:drawable/ic_menu_camera"
-            android:background="@color/light_blue"/>
+            android:background="@color/transparent"/>
 
         <View
             android:layout_width="0dp"

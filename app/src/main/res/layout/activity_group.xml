@@ -5,13 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.GroupInt"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/background">
 
     <Button
         android:id="@+id/inventoryAddGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/group_add" />
+        android:text="@string/group_add"
+        android:background="@drawable/button_blue"
+        style="@style/Button"
+        android:layout_marginTop="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/inventoryGroup"

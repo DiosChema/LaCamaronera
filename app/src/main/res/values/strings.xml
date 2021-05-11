@@ -12,6 +12,7 @@
     <string name="menu_stock">Inventario</string>
     <string name="menu_assorment">Surtido</string>
     <string name="menu_assorments">Surtidos</string>
+    <string name="menu_expences">Servicios</string>
 
     <string name="dish_name">Nombre</string>
     <string name="dish_price">Precio</string>
@@ -38,6 +39,10 @@
 
     <string name="inventory_dish">Platillos</string>
     <string name="inventory_ingredients">Ingredientes</string>
+
+    <string name="expenses">Servicios</string>
+    <string name="expenses_new">Agregar servicios</string>
+    <string name="expenses_his">Registro Servicios</string>
 
     <string name="inventory_add_dish">Agregar Platillo</string>
     <string name="inventory_add_ingredients">Agregar Ingredientes</string>
@@ -67,6 +72,9 @@
     <string name="dialogSelectDateInitial">Selecciona la fecha inicial</string>
     <string name="dialogSelectDateFinal">Selecciona la fecha final</string>
 
+    <string name="message_invalid_email">Ingrese un correo electronico valido.</string>
+    <string name="message_invalid_password">La contraseña debe contar con al menos 8 caracteres.</string>
+
     <string name="moth_enero">Enero</string>
     <string name="moth_febrero">Febrero</string>
     <string name="moth_marzo">Marzo</string>
@@ -82,6 +90,7 @@
 
     <string name="wait">Favor de esperar un momento</string>
     <string name="error">Ocurrio un error, favor de esperar un momento</string>
+    <string name="invalid">Usuario o contraseña invalido</string>
 
 
     <string name="item_amount">Cant:</string>

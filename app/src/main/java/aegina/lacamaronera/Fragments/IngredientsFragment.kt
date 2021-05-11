@@ -126,4 +126,10 @@ class IngredientsFragment : Fragment() {
         })
 
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        getIngredients()
+    }
 }

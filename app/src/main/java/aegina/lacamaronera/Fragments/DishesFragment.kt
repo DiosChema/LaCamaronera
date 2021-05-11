@@ -137,4 +137,10 @@ class DishesFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        getDishes()
+    }
+
 }

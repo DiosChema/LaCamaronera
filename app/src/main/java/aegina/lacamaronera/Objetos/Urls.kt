@@ -7,7 +7,9 @@ data class Urls(
     var endPointsImagenes: UrlsImages,
     var endPointDishes: UrlsDishes,
     var endPointAssorment: UrlsAssorment,
-    var endPointSale: UrlsSale
+    var endPointSale: UrlsSale,
+    var endPointUser: UrlsUser,
+    var endPointExpenses: UrlsExpense
 )
 {
     constructor(): this(
@@ -44,6 +46,17 @@ data class Urls(
             "Venta/AltaVenta",
             "Venta/ConsultaVenta",
             "Venta/AltaVariasVentas"
+        ),
+        UrlsUser(
+            "Usuario/LoginEmpleado"
+        ),
+        UrlsExpense(
+            "Servicios/ObtenerServicios",
+            "Servicios/AltaServicio",
+            "Servicios/ActualizarServicio",
+            "Servicios/BajaServicio",
+            "Servicios/ObtenerGastoServicios",
+            "Servicios/AltaGastoServicio"
         )
     )
 }
@@ -85,4 +98,17 @@ data class UrlsSale(
     val endPointPostSale: String,
     val endPointGetSale: String,
     val endPointPostSales: String
+)
+
+data class UrlsUser(
+    val endPointGetUser: String
+)
+
+data class UrlsExpense(
+    val endPointGetExpenses: String,
+    val endPointPostExpenses: String,
+    val endPointUpdateExpenses: String,
+    val endPointDeleteServices: String,
+    val endPointGetExpensesServices: String,
+    val endPointPostExpensesServices: String
 )

@@ -30,6 +30,11 @@
             android:id="@+id/drawerMenuAssorments"
             android:icon="@drawable/icon_ingredients"
             android:title="@string/menu_assorments" />
+
+        <item
+            android:id="@+id/drawerMenuExpenses"
+            android:icon="@drawable/icon_ingredients"
+            android:title="@string/menu_expences" />
     </group>
 
 </menu>

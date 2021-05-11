@@ -12,8 +12,9 @@
 
     <color name="black">#000000</color>
     <color name="blue">#45aaf1</color>
+    <color name="dark_blue">#1086d9</color>
     <color name="light_blue">#7cc3f5</color>
-    <color name="tool_bar_background">#7cc3f5</color>
+    <color name="tool_bar_background">#35a2f0</color>
     <color name="light_background">#2199ee</color>
     <color name="imageBorderColor">#ebece7</color>
     <color name="red">#FF6961</color>

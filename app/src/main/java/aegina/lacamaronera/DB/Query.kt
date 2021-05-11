@@ -1,5 +1,6 @@
 package aegina.lacamaronera.DB
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import android.content.ContentValues
 import android.content.Context
@@ -17,6 +18,7 @@ class Query
             val data = ContentValues()
 
             data.put("fecha", saleObj.fecha)
+            data.put("idEmpleado", saleObj.idEmpleado)
             query.insert("Ventas", null, data)
             data.clear()
 
@@ -64,7 +66,7 @@ class Query
 
         val query = db.writableDatabase
 
-        val getSale = query.rawQuery("select idVenta, fecha from Ventas", null)
+        val getSale = query.rawQuery("select idVenta, fecha, idEmpleado from Ventas", null)
 
         if (getSale.moveToFirst())
         {
@@ -106,7 +108,7 @@ class Query
                         dishes,
                         0.0,
                         getSale.getString(1),
-                        1
+                        getSale.getInt(2)
                     )
                 )
 
@@ -171,6 +173,8 @@ class Query
             }
         }
 
+        db.close()
+
         return dishesList
     }
 
@@ -179,6 +183,9 @@ class Query
         val db = DB(contextTmp, "Admin", null, 1)
         val query = db.writableDatabase
         val data = ContentValues()
+
+        query.execSQL("delete from IngredientesRespaldo")
+        query.execSQL("delete from PlatillosRespaldo")
 
         for(dishTmp: DishesObj in dishesTmp)
         {
@@ -199,6 +206,8 @@ class Query
             query.insert("PlatillosRespaldo", null, data)
             data.clear()
         }
+
+        db.close()
     }
 
     fun cleanDishes(contextTmp: Context)
@@ -209,5 +218,92 @@ class Query
         query.execSQL("delete from Ventas")
         query.execSQL("delete from Platillos")
         query.execSQL("delete from Ingredientes")
+
+        db.close()
     }
+
+    fun insertUser(
+        contextTmp: Context,
+        user: User,
+        password: String
+    )
+    {
+        val db = DB(contextTmp, "Admin", null, 1)
+        val query = db.writableDatabase
+        val data = ContentValues()
+
+        query.execSQL("delete from User")
+
+        data.put("idEmpleado", user.idEmpleado)
+        data.put("user", user.user)
+        data.put("nombre", user.nombre)
+        data.put("admin", if(user.admin) 1 else 0)
+        data.put("password", password)
+
+        query.insert("User", null, data)
+        data.clear()
+
+        db.close()
+    }
+
+    fun getUser(
+        contextTmp: Context,
+        email:String,
+        password:String
+    ): User
+    {
+        val db = DB(contextTmp, "Admin", null, 1)
+        val query = db.writableDatabase
+
+        var user = User(-1, "","",false)
+
+        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin from User where user = $email, password = $password", null)
+
+        if (getDishes.moveToFirst())
+        {
+            while (!getDishes.isAfterLast)
+            {
+                user = User(
+                    getDishes.getInt(0),
+                    getDishes.getString(1),
+                    getDishes.getString(2),
+                    getDishes.getInt(3) == 1
+                )
+            }
+        }
+
+        db.close()
+
+        return user
+    }
+
+    fun getUserDataBase(
+        contextTmp: Context
+    ): User
+    {
+        val db = DB(contextTmp, "Admin", null, 1)
+        val query = db.writableDatabase
+
+        var user = User(-1, "","",false)
+
+        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin from User", null)
+
+        if (getDishes.moveToFirst())
+        {
+            while (!getDishes.isAfterLast)
+            {
+                user = User(
+                    getDishes.getInt(0),
+                    getDishes.getString(1),
+                    getDishes.getString(2),
+                    getDishes.getInt(3) == 1
+                )
+            }
+        }
+
+        db.close()
+
+        return user
+    }
+
 }

@@ -20,7 +20,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -171,7 +170,8 @@ class Sale : AppCompatActivity(),
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         val currentDate = sdf.format(Date())
 
-        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString(), 1)
+        val query = Query()
+        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString(), query.getUserDataBase(contextTmp).idEmpleado)
 
         val url = urls.url+urls.endPointSale.endPointPostSale
 

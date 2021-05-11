@@ -9,35 +9,58 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".General.GlobalClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.Sales"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Assorments"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Assorment"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.DishesDetails"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.IngredientsDetails"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Ingredients"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.PagerInventory"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.GroupInt"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Dishes"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Sale"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.Menu"
-            android:screenOrientation="behind"/>
-        <activity android:name=".Activities.MainActivity"
+        <activity android:name=".Activities.ServicesExpense"></activity>
+        <activity
+            android:name=".Activities.Sales"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Assorments"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Assorment"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.DishesDetails"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.IngredientsDetails"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Ingredients"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Pagers.PagerInventory"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Pagers.PagerExpenses"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Services"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.ServicesDetails"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.GroupInt"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Dishes"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Sale"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.Menu"
+            android:screenOrientation="behind" />
+        <activity
+            android:name=".Activities.MainActivity"
             android:screenOrientation="behind">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

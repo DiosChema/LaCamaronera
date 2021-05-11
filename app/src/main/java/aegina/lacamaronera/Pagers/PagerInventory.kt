@@ -1,4 +1,4 @@
-package aegina.lacamaronera.Activities
+package aegina.lacamaronera.Pagers
 
 import aegina.lacamaronera.Fragments.DishesFragment
 import aegina.lacamaronera.Fragments.IngredientsFragment
@@ -31,7 +31,9 @@ class PagerInventory : AppCompatActivity() {
 
     fun asignarFragments()
     {
-        adapter = MyViewPagerAdapter(supportFragmentManager)
+        adapter = MyViewPagerAdapter(
+            supportFragmentManager
+        )
         adapter.addFragment(DishesFragment(), getString(R.string.inventory_dish))
         adapter.addFragment(IngredientsFragment(), getString(R.string.inventory_ingredients))
         pagerInventoryPager.adapter = adapter

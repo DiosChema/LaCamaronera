@@ -1,7 +1,9 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.DB.Query
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
+import aegina.lacamaronera.Pagers.PagerInventory
 import aegina.lacamaronera.R
 import android.app.Activity
 import android.app.ProgressDialog
@@ -31,6 +33,7 @@ class Menu : AppCompatActivity(),
     lateinit var progressDialog: ProgressDialog
     lateinit var contextTmp: Context
     lateinit var activityTmp: Context
+    lateinit var globalVariable: GlobalClass
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
@@ -103,7 +106,7 @@ class Menu : AppCompatActivity(),
         val query = Query()
 
         val sales = query.getLocalSales(this)
-        if(!sales.isEmpty())
+        if(sales.isNotEmpty())
         {
             addDishes(sales)
         }

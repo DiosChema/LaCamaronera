@@ -106,7 +106,6 @@ class IngredientsDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectP
                     if(body != null && body.isNotEmpty())
                     {
                         val gson = GsonBuilder().create()
-                        Log.v("TAG", body.toString());
                         val model = gson.fromJson(body, IngredientObj::class.java)
 
                         ingredientObj = model

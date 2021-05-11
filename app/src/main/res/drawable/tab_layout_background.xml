@@ -9,6 +9,6 @@
 
     <!-- TabLayout background color -->
     <solid
-        android:color="@color/white"/>
+        android:color="@color/transparent"/>
 
 </shape>

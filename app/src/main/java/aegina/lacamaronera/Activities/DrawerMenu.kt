@@ -1,5 +1,7 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Pagers.PagerExpenses
+import aegina.lacamaronera.Pagers.PagerInventory
 import aegina.lacamaronera.R
 import android.app.Activity
 import android.content.Context
@@ -32,6 +34,10 @@ class DrawerMenu
             }
             R.id.drawerMenuAssorments -> {
                 i.setClass(contextTmp, Assorments::class.java)
+                contextTmp.startActivity(i)
+            }
+            R.id.drawerMenuExpenses -> {
+                i.setClass(contextTmp, PagerExpenses::class.java)
                 contextTmp.startActivity(i)
             }
         }

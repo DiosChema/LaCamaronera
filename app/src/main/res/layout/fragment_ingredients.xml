@@ -5,19 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.DishesFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="2dp">
+        android:layout_marginTop="10dp">
 
         <Button
             android:id="@+id/IngredientsAddDish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/inventory_add_ingredients"
             android:background="@drawable/button_blue"
             style="@style/Button"/>
@@ -28,10 +28,7 @@
         android:id="@+id/InventoryIngredient"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="15dp"/>
+        android:layout_marginTop="10dp"/>
 
 
 
