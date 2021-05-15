@@ -5,8 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 
-class Errores()
-{
+class Errores {
     fun procesarError(context: Context, activity: Activity)
     {
         activity.runOnUiThread()

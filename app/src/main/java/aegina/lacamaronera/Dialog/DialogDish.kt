@@ -1,6 +1,7 @@
 package aegina.lacamaronera.Dialog
 
 import aegina.lacamaronera.DB.Query
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -23,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 
 class DialogDish: AppCompatDialogFragment()
@@ -41,8 +44,11 @@ class DialogDish: AppCompatDialogFragment()
 
     var listIngredients:MutableList<DishesObj> = ArrayList()
 
-    fun createDialog(context: Context, activity : Activity)
+    lateinit var globalVariable: GlobalClass
+
+    fun createDialog(context: Context, activity : Activity, globalClass: GlobalClass)
     {
+        globalVariable = globalClass
         contextTmp = context
         activityTmp = activity
         dialogIngredients = contextTmp as DialogDishInt
@@ -60,7 +66,7 @@ class DialogDish: AppCompatDialogFragment()
         recyclerViewDishes = RecyclerViewDishes()
         dialogIngredientsIngredient.setHasFixedSize(true)
         dialogIngredientsIngredient.layoutManager = LinearLayoutManager(contextTmp)
-        recyclerViewDishes.RecyclerAdapter(listIngredients, contextTmp)
+        recyclerViewDishes.RecyclerAdapter(listIngredients, contextTmp, globalVariable)
         dialogIngredientsIngredient.adapter = recyclerViewDishes
 
         dialogIngredientsIngredient.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, dialogIngredientsIngredient, object :
@@ -111,7 +117,8 @@ class DialogDish: AppCompatDialogFragment()
                     listIngredients[position].precio,
                     listIngredients[position].ingredientes,
                     listIngredients[position].idFamilia,
-                    dialogText.text.toString()
+                    dialogText.text.toString(),
+                    ""
                 )
 
                 dialogIngredients.getDish(dishObjTmp)
@@ -129,11 +136,22 @@ class DialogDish: AppCompatDialogFragment()
 
     fun getDishes()
     {
-        val url = urls.url+urls.endPointDishes.endPointConsultarPlatillos
+        val url = globalVariable.user!!.url+urls.endPointDishes.endPointConsultarPlatillos
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         client.newCall(request).enqueue(object : Callback {

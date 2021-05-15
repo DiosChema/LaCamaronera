@@ -3,6 +3,8 @@ package aegina.lacamaronera.Activities
 import aegina.lacamaronera.DB.Query
 import aegina.lacamaronera.Dialog.DialogDish
 import aegina.lacamaronera.Dialog.DialogEnterNumber
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.*
@@ -30,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Double
 import java.lang.Double.parseDouble
@@ -63,6 +67,8 @@ class Sale : AppCompatActivity(),
     var listIngredients: MutableList<DishesObj> = ArrayList()
     var listIngredientsTablet: MutableList<DishesObj> = ArrayList()
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorment)
@@ -72,6 +78,9 @@ class Sale : AppCompatActivity(),
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         draweMenu()
         assignResources()
@@ -93,7 +102,7 @@ class Sale : AppCompatActivity(),
 
             dialogIngredients = DialogDish()
 
-            dialogIngredients.createDialog(this, this)
+            dialogIngredients.createDialog(this, this, globalVariable)
 
             assormentIngredientsAdd.setOnClickListener()
             {
@@ -111,7 +120,7 @@ class Sale : AppCompatActivity(),
 
         assormentIngredientsFinish.setOnClickListener()
         {
-            addAssorment()
+            dialogNumber.showDialog(assormentIngredientsTotal.text.toString())
         }
 
         createRecyclerView()
@@ -170,10 +179,9 @@ class Sale : AppCompatActivity(),
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         val currentDate = sdf.format(Date())
 
-        val query = Query()
-        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString(), query.getUserDataBase(contextTmp).idEmpleado)
+        val saleObj = SaleObj(0, listAssorment, 0.0, currentDate.toString(), globalVariable.user!!.idUsuario, globalVariable.user!!.nombre, globalVariable.user!!.token)
 
-        val url = urls.url+urls.endPointSale.endPointPostSale
+        val url = globalVariable.user!!.url+urls.endPointSale.endPointPostSale
 
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
         val jsonTutPretty: String = gsonPretty.toJson(saleObj)
@@ -181,6 +189,7 @@ class Sale : AppCompatActivity(),
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
         val body = RequestBody.create(JSON, jsonTutPretty)
+
         val request = Request.Builder()
             .url(url)
             .post(body)
@@ -271,7 +280,7 @@ class Sale : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mViewIngredient.RecyclerAdapter(listIngredients, this)
+        mViewIngredient.RecyclerAdapter(listIngredients, this, globalVariable)
         mRecyclerView.adapter = mViewIngredient
 
 
@@ -283,7 +292,7 @@ class Sale : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsListRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = GridLayoutManager(this, 3, RecyclerView.HORIZONTAL, false)
-        recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
+        recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this, globalVariable)
         mRecyclerView.adapter = recyclerViewIngredients
 
         dialogNumber = DialogEnterNumber()
@@ -366,7 +375,7 @@ class Sale : AppCompatActivity(),
             pricesTmp += (parseDouble(listIngredients[i].descripcion) * listIngredients[i].precio)
         }
 
-        assormentIngredientsTotal.text = getString(R.string.assorments_total) + " " + pricesTmp.toString()
+        assormentIngredientsTotal.text = pricesTmp.toString()
     }
 
     private fun ingredientAlreadyInDish(dishSaleObj: DishesObj): Boolean
@@ -385,11 +394,22 @@ class Sale : AppCompatActivity(),
 
     fun getDishes()
     {
-        val url = urls.url+urls.endPointDishes.endPointConsultarPlatillos
+        val url = globalVariable.user!!.url+urls.endPointDishes.endPointConsultarPlatillos
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -465,7 +485,7 @@ class Sale : AppCompatActivity(),
         }
     }
 
-    override fun getNumber(number: kotlin.Double, position: Int) {
+    /*override fun getNumber(number: kotlin.Double, position: Int) {
         val ingredientObj = listIngredientsTablet[position]
 
         ingredientObj.descripcion = number.toString()
@@ -480,7 +500,7 @@ class Sale : AppCompatActivity(),
             updateAmountPrices()
             mViewIngredient.notifyDataSetChanged()
         }
-    }
+    }*/
 
     override fun actualizarNumero(value: Int, position: Int) {
         val dishesObj = DishesObj(
@@ -489,7 +509,8 @@ class Sale : AppCompatActivity(),
             listIngredients[position].precio,
             listIngredients[position].ingredientes,
             listIngredients[position].idFamilia,
-            (parseDouble(listIngredients[position].descripcion) + value).toString()
+            (parseDouble(listIngredients[position].descripcion) + value).toString(),
+            listIngredients[position].token
         )
 
         listIngredients[position] = dishesObj
@@ -514,6 +535,10 @@ class Sale : AppCompatActivity(),
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun finishSale() {
+        addAssorment()
     }
 
 }

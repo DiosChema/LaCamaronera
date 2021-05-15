@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.AssormentIngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -17,15 +18,17 @@ class RecyclerViewAssormentIngredient : RecyclerView.Adapter<RecyclerViewAssorme
 
     var groups: MutableList<AssormentIngredientObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<AssormentIngredientObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<AssormentIngredientObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,12 +53,12 @@ class RecyclerViewAssormentIngredient : RecyclerView.Adapter<RecyclerViewAssorme
         var itemAssormentIngredientName = view.findViewById(R.id.itemIngredientHistorialName) as TextView
         var itemAssormentIngredientTotal = view.findViewById(R.id.itemIngredientHistorialTotal) as TextView
 
-        fun bind(articulo: AssormentIngredientObj) {
+        fun bind(articulo: AssormentIngredientObj, globalVariable: GlobalClass) {
             itemAssormentIngredientName.text = articulo.nombre
             val textTmp = articulo.cantidad.toString() + " x $" + articulo.precio
             itemAssormentIngredientPrice.text = textTmp
             itemAssormentIngredientTotal.text = (articulo.cantidad * articulo.precio).toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+ ".jpeg&token="+ globalVariable.user!!.token
             itemAssormentIngredientPhoto.loadUrl(url)
         }
 

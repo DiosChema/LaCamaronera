@@ -2,6 +2,8 @@ package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.Errores
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.ResponseObj
@@ -22,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.GsonBuilder
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.*
 import java.lang.Double.parseDouble
 import java.util.*
@@ -39,6 +43,8 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
     var dialogSelectPhoto = DialogSelectPhoto()
     var cambioFoto : Boolean = false
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ingredients)
@@ -48,6 +54,9 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         createProgressDialog()
         assignResources()
@@ -126,14 +135,24 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsIngredientes.endPointAltaIngrediente
+        val url = globalVariable.user!!.url+urls.endPointsIngredientes.endPointAltaIngrediente
 
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-        val jsonTutPretty: String = gsonPretty.toJson(ingredientObj)
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("nombre", ingredientObj.nombre)
+            jsonObject.put("costo", ingredientObj.costo)
+            jsonObject.put("descripcion", ingredientObj.descripcion)
+            jsonObject.put("existencia", ingredientObj.existencia)
+            jsonObject.put("unidad", ingredientObj.unidad)
+            jsonObject.put("usoPlatillo", ingredientObj.usoPlatillo)
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
 
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
-        val body = RequestBody.create(JSON, jsonTutPretty)
+        val body = RequestBody.create(JSON, jsonObject.toString())
 
         val request = Request.Builder()
             .url(url)
@@ -167,6 +186,7 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
                                 }
                                 else
                                 {
+                                    globalVariable.updateWindow!!.refreshIngredient = true
                                     finish()
                                 }
                             }
@@ -189,6 +209,7 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
     private fun uploadImage(nombreImagen : String)
     {
         val drawable = ingredientsPhoto.drawable
+        globalVariable.updateWindow!!.refreshIngredient = true
 
         val bitmap: Bitmap = (drawable as BitmapDrawable).bitmap
         val file = general.bitmapToFile(bitmap, activityTmp)
@@ -196,12 +217,15 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
         val MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg")
         val req: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart(
+                "token",
+                globalVariable.user!!.token)
+            .addFormDataPart(
                 "image",
             "in$nombreImagen.jpeg",
                 RequestBody.create(MEDIA_TYPE_JPEG, file)
             ).build()
         val request = Request.Builder()
-            .url(urls.url+urls.endPointsImagenes.endPointAltaImagen)
+            .url(globalVariable.user!!.url+urls.endPointsImagenes.endPointAltaImagen)
             .post(req)
             .build()
         val client = OkHttpClient()
@@ -257,9 +281,10 @@ class Ingredients : AppCompatActivity(), DialogSelectPhoto.DialogSelectPhotoInt 
 
     companion object {
         //image pick code
-        private val IMAGE_PICK_CODE = 1000;
+        private val IMAGE_PICK_CODE = 1000
+
         //Permission code
-        private val PERMISSION_CODE = 1001;
+        private val PERMISSION_CODE = 1001
     }
 
 }

@@ -1,5 +1,6 @@
 package aegina.lacamaronera.Dialog
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -22,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Double.parseDouble
 
@@ -41,8 +44,11 @@ class DialogIngredients: AppCompatDialogFragment()
 
     var listIngredients:MutableList<IngredientObj> = ArrayList()
 
-    fun createDialog(context: Context, activity : Activity)
+    lateinit var globalVariable: GlobalClass
+
+    fun createDialog(context: Context, activity : Activity, globalClass: GlobalClass)
     {
+        globalVariable = globalClass
         contextTmp = context
         activityTmp = activity
         dialogIngredients = contextTmp as DialogIngredientsInt
@@ -60,7 +66,7 @@ class DialogIngredients: AppCompatDialogFragment()
         recyclerViewIngredients = RecyclerViewIngredients()
         dialogIngredientsIngredient.setHasFixedSize(true)
         dialogIngredientsIngredient.layoutManager = LinearLayoutManager(contextTmp)
-        recyclerViewIngredients.RecyclerAdapter(listIngredients, contextTmp)
+        recyclerViewIngredients.RecyclerAdapter(listIngredients, contextTmp, globalVariable)
         dialogIngredientsIngredient.adapter = recyclerViewIngredients
 
         dialogIngredientsIngredient.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, dialogIngredientsIngredient, object :
@@ -140,11 +146,22 @@ class DialogIngredients: AppCompatDialogFragment()
 
     fun getIngredients()
     {
-        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+        val url = globalVariable.user!!.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         client.newCall(request).enqueue(object : Callback {

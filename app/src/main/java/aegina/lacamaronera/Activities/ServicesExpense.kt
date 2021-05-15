@@ -1,12 +1,15 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.Dialog.DialogServices
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -40,9 +43,20 @@ class ServicesExpense : AppCompatActivity() {
     lateinit var contextTmp: Context
     lateinit var activityTmp: Activity
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_services_expense)
+
+        requestedOrientation = if(resources.getBoolean(R.bool.portrait_only)) {
+            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        } else {
+            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         serviceObj = intent.getSerializableExtra("service") as ServiceObj
         contextTmp = this
@@ -67,9 +81,9 @@ class ServicesExpense : AppCompatActivity() {
         dialogTextAccept = findViewById<View>(R.id.dialogServicesAccept) as Button
         dialogTextCancel = findViewById<View>(R.id.dialogServicesCancel) as Button
 
-        val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio+".jpeg"
+        val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio+ ".jpeg&token="+ globalVariable.user!!.token
 
-        dialogTextTitle.setText(serviceObj.nombre)
+        dialogTextTitle.text = serviceObj.nombre
 
         dialogServicesPhoto.loadUrl(url)
 
@@ -91,7 +105,7 @@ class ServicesExpense : AppCompatActivity() {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         val currentDate = sdf.format(Date())
 
-        val url = url.url+url.endPointExpenses.endPointPostExpensesServices
+        val url = globalVariable.user!!.url+url.endPointExpenses.endPointPostExpensesServices
 
         val jsonObject = JSONObject()
         try {
@@ -100,6 +114,7 @@ class ServicesExpense : AppCompatActivity() {
             jsonObject.put("descripcion", text)
             jsonObject.put("fecha",  currentDate.toString())
             jsonObject.put("gasto",  cost)
+            jsonObject.put("token",  globalVariable.user!!.token)
         } catch (e: JSONException)
         {
             e.printStackTrace()

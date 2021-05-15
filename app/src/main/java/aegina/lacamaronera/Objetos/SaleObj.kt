@@ -7,5 +7,7 @@ data class SaleObj(
     var platillos:List<DishSaleObj>,
     var totalVenta:Double,
     var fecha: String,
-    var idEmpleado: Int
+    var idEmpleado: Int,
+    var nombreEmpleado: String,
+    var token: String
 ):Serializable

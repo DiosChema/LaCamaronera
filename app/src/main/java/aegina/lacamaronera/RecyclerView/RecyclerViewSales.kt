@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import android.animation.Animator
@@ -24,17 +25,19 @@ class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
     var groups: MutableList<SaleDishObj> = ArrayList()
     lateinit var context: Context
     var selected_position = -1
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<SaleDishObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<SaleDishObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
         holder.itemView.setBackgroundColor(if(selected_position == position) holder.itemView.context.resources.getColor(R.color.light_gray) else Color.TRANSPARENT)
 
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -67,7 +70,7 @@ class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
         var simpleDate: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         var simpleDateHours: SimpleDateFormat = SimpleDateFormat("HH:mm:ss")
 
-        fun bind(articulo: SaleDishObj) {
+        fun bind(articulo: SaleDishObj, globalVariable: GlobalClass) {
 
             if(itemView.resources.getBoolean(R.bool.portrait_only))
             {
@@ -81,7 +84,7 @@ class RecyclerViewSales : RecyclerView.Adapter<RecyclerViewSales.ViewHolder>() {
                     if(llenarRecyclerView)
                     {
                         if (itemView.context != null) {
-                            mViewVentas.RecyclerAdapter(articulo.platillos.toMutableList(), itemView.context)
+                            mViewVentas.RecyclerAdapter(articulo.platillos.toMutableList(), itemView.context, globalVariable)
                         }
                         mRecyclerView.adapter = mViewVentas
                         llenarRecyclerView = false

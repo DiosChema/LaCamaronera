@@ -1,6 +1,5 @@
 package aegina.lacamaronera.DB
 
-import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import android.content.ContentValues
 import android.content.Context
@@ -66,7 +65,7 @@ class Query
 
         val query = db.writableDatabase
 
-        val getSale = query.rawQuery("select idVenta, fecha, idEmpleado from Ventas", null)
+        val getSale = query.rawQuery("select idVenta, fecha, idEmpleado, nombreEmpleado from Ventas", null)
 
         if (getSale.moveToFirst())
         {
@@ -108,7 +107,9 @@ class Query
                         dishes,
                         0.0,
                         getSale.getString(1),
-                        getSale.getInt(2)
+                        getSale.getInt(2),
+                        getSale.getString(3),
+                        ""
                     )
                 )
 
@@ -140,7 +141,8 @@ class Query
                     getDishes.getDouble(2),
                     ArrayList(),
                     getDishes.getInt(3),
-                    getDishes.getString(4)
+                    getDishes.getString(4),
+                    ""
                 ))
 
                 getDishes.moveToNext()
@@ -234,11 +236,14 @@ class Query
 
         query.execSQL("delete from User")
 
-        data.put("idEmpleado", user.idEmpleado)
-        data.put("user", user.user)
+        data.put("idEmpleado", user.idUsuario)
+        data.put("user", user.usuario)
         data.put("nombre", user.nombre)
         data.put("admin", if(user.admin) 1 else 0)
         data.put("password", password)
+        data.put("url", user.url)
+        data.put("token", user.token)
+        data.put("internet", if(user.online) 1 else 0)
 
         query.insert("User", null, data)
         data.clear()
@@ -255,9 +260,9 @@ class Query
         val db = DB(contextTmp, "Admin", null, 1)
         val query = db.writableDatabase
 
-        var user = User(-1, "","",false)
+        var user = User(-1, "","",false, "", "", false)
 
-        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin from User where user = $email, password = $password", null)
+        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin, token, url from User where user = '$email' AND password = '$password'", null)
 
         if (getDishes.moveToFirst())
         {
@@ -267,8 +272,13 @@ class Query
                     getDishes.getInt(0),
                     getDishes.getString(1),
                     getDishes.getString(2),
-                    getDishes.getInt(3) == 1
+                    getDishes.getInt(3) == 1,
+                    getDishes.getString(4),
+                    getDishes.getString(5),
+                    false
                 )
+
+                getDishes.moveToNext()
             }
         }
 
@@ -284,9 +294,9 @@ class Query
         val db = DB(contextTmp, "Admin", null, 1)
         val query = db.writableDatabase
 
-        var user = User(-1, "","",false)
+        var user = User(-1, "","",false, "", "", false)
 
-        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin from User", null)
+        val getDishes = query.rawQuery("select idEmpleado, user, nombre, admin, token, url, internet from User", null)
 
         if (getDishes.moveToFirst())
         {
@@ -296,14 +306,44 @@ class Query
                     getDishes.getInt(0),
                     getDishes.getString(1),
                     getDishes.getString(2),
-                    getDishes.getInt(3) == 1
+                    getDishes.getInt(3) == 1,
+                    getDishes.getString(4),
+                    getDishes.getString(5),
+                    getDishes.getInt(6) == 1
                 )
+
+                getDishes.moveToNext()
             }
         }
 
         db.close()
 
         return user
+    }
+
+    fun getUrl(
+        contextTmp: Context
+    ): String
+    {
+        val db = DB(contextTmp, "Admin", null, 1)
+        val query = db.writableDatabase
+
+        var url = ""
+
+        val getDishes = query.rawQuery("select url from User", null)
+
+        if (getDishes.moveToFirst())
+        {
+            while (!getDishes.isAfterLast)
+            {
+                url = getDishes.getString(0)
+                getDishes.moveToNext()
+            }
+        }
+
+        db.close()
+
+        return url
     }
 
 }

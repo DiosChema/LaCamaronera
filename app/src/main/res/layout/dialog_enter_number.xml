@@ -3,21 +3,67 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="right|bottom"
     android:columnCount="4"
     android:orientation="vertical"
     android:background="@drawable/black_border"
     android:padding="12dp">
 
-    <TextView
-        android:id="@+id/dialogEnterNumberText"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TitleText"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="3dp"
-        android:background="#ededed"
-        android:elevation="2dp"/>
+        android:hint="@string/sale_total"
+        style="@style/TitleText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogEnterNumberTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            style="@style/TitleText"
+            android:enabled="false"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/sale_pay"
+        style="@style/TitleText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogEnterNumberText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            style="@style/TitleText"
+            android:enabled="false" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/sale_exchange"
+        style="@style/TitleText">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialogEnterNumberExchange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:inputType="text"
+            android:importantForAutofill="no"
+            style="@style/TitleText"
+            android:enabled="false"  />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <GridLayout
         android:layout_width="wrap_content"

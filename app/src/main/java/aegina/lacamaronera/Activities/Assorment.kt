@@ -4,6 +4,8 @@ import aegina.lacamaronera.Dialog.DialogDish
 import aegina.lacamaronera.Dialog.DialogEnterNumber
 import aegina.lacamaronera.Dialog.DialogIngredients
 import aegina.lacamaronera.Dialog.DialogNumber
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
@@ -33,6 +35,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Double
 import java.lang.Double.parseDouble
@@ -42,7 +46,7 @@ import java.util.*
 
 class Assorment : AppCompatActivity(),
     DialogIngredients.DialogIngredientsInt,
-    DialogEnterNumber.DialogEnterNumberInt,
+    /*DialogEnterNumber.DialogEnterNumberInt,*/
     RecyclerViewAssorment.AssormentInt,
     NavigationView.OnNavigationItemSelectedListener{
 
@@ -66,6 +70,8 @@ class Assorment : AppCompatActivity(),
     var listIngredients: MutableList<IngredientObj> = ArrayList()
     var listIngredientsTablet: MutableList<IngredientObj> = ArrayList()
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorment)
@@ -75,6 +81,9 @@ class Assorment : AppCompatActivity(),
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         draweMenu()
         assignResources()
@@ -96,7 +105,7 @@ class Assorment : AppCompatActivity(),
 
             dialogIngredients = DialogIngredients()
             dialogIngredients.textAssorment(this)
-            dialogIngredients.createDialog(this, this)
+            dialogIngredients.createDialog(this, this, globalVariable)
 
             assormentIngredientsAdd.setOnClickListener()
             {
@@ -172,16 +181,16 @@ class Assorment : AppCompatActivity(),
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
         val currentDate = sdf.format(Date())
 
-        val assormentObj = AssormentObj(0, listAssorment, 0.0, currentDate.toString())
+        val url = globalVariable.user!!.url+urls.endPointAssorment.endPointPostAssorment
 
-        val url = urls.url+urls.endPointAssorment.endPointPostAssorment
-
+        val assormentObj = AssormentObj(0, listAssorment, 0.0, currentDate.toString(), globalVariable.user!!.token)
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
         val jsonTutPretty: String = gsonPretty.toJson(assormentObj)
 
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
         val body = RequestBody.create(JSON, jsonTutPretty)
+
         val request = Request.Builder()
             .url(url)
             .post(body)
@@ -243,7 +252,7 @@ class Assorment : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
-        mViewIngredient.RecyclerAdapter(listIngredients, this)
+        mViewIngredient.RecyclerAdapter(listIngredients, this, globalVariable)
         mRecyclerView.adapter = mViewIngredient
     }
 
@@ -253,11 +262,11 @@ class Assorment : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentIngredientsListRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = GridLayoutManager(this, 3, RecyclerView.HORIZONTAL, false)
-        recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this)
+        recyclerViewIngredients.RecyclerAdapter(listIngredientsTablet, this, globalVariable)
         mRecyclerView.adapter = recyclerViewIngredients
 
-        dialogNumber = DialogEnterNumber()
-        dialogNumber.createDialog(this,this)
+        //dialogNumber = DialogEnterNumber()
+        //dialogNumber.createDialog(this,this)
 
         mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
             RecyclerItemClickListener.OnItemClickListener {
@@ -357,11 +366,22 @@ class Assorment : AppCompatActivity(),
 
     fun getIngredients()
     {
-        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+        val url = globalVariable.user!!.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -401,7 +421,7 @@ class Assorment : AppCompatActivity(),
 
     }
 
-    override fun getNumber(number: kotlin.Double, position: Int) {
+    /*override fun getNumber(number: kotlin.Double, position: Int) {
         val ingredientObj = listIngredientsTablet[position]
 
         ingredientObj.existencia = number
@@ -416,7 +436,7 @@ class Assorment : AppCompatActivity(),
             updateAmountPrices()
             mViewIngredient.notifyDataSetChanged()
         }
-    }
+    }*/
 
     override fun actualizarNumero(value: Int, position: Int) {
         val ingredientObj = IngredientObj(

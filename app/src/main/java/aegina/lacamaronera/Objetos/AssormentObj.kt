@@ -6,5 +6,6 @@ data class AssormentObj(
     var idGasto:Int,
     var ingredientes:List<AssormentIngredientObj>,
     var totalGasto:Double,
-    var fecha: String
+    var fecha: String,
+    var token: String
 ):Serializable

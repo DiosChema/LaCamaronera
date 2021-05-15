@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">La Camaronera</string>
-    <string name="email">Correo electronico</string>
+    <string name="email">Correo electrónico</string>
     <string name="password">Contraseña</string>
-    <string name="login_login">Iniciar Sesion</string>
+    <string name="login_login">Iniciar Sesión</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="menu">Menu</string>
+    <string name="menu">Menú</string>
     <string name="menu_sale">Venta</string>
     <string name="menu_sales">Ventas</string>
     <string name="menu_stock">Inventario</string>
@@ -18,12 +18,12 @@
     <string name="dish_price">Precio</string>
     <string name="dish_cost">Costo</string>
     <string name="dish_group">Familia</string>
-    <string name="dish_description">Descripcion</string>
+    <string name="dish_description">Descripción</string>
     <string name="dish_existence">Existencia</string>
     <string name="dish_measurement">Medida</string>
     <string name="dish_add">Agregar</string>
     <string name="dish_add_ingredient">Agregar Ingrediente</string>
-    <string name="dish_add_ingredient_title_dish">Cantidad a comsumir</string>
+    <string name="dish_add_ingredient_title_dish">Cantidad a consumir</string>
     <string name="dish_add_ingredient_title_assorment">Cantidad a comprar</string>
     <string name="dish_delete">¿Estas seguro que deseas eliminar este platillo?</string>
 
@@ -43,12 +43,16 @@
     <string name="expenses">Servicios</string>
     <string name="expenses_new">Agregar servicios</string>
     <string name="expenses_his">Registro Servicios</string>
+    <string name="expenses_delete">¿Estas seguro que deseas eliminar este servicio?</string>
 
     <string name="inventory_add_dish">Agregar Platillo</string>
     <string name="inventory_add_ingredients">Agregar Ingredientes</string>
     <string name="inventory_add_group">Grupos</string>
 
     <string name="sale_order">Orden</string>
+    <string name="sale_total">Total</string>
+    <string name="sale_pay">Pago</string>
+    <string name="sale_exchange">Cambio</string>
 
 
     <string name="assorment_add">Añadir</string>
@@ -72,7 +76,7 @@
     <string name="dialogSelectDateInitial">Selecciona la fecha inicial</string>
     <string name="dialogSelectDateFinal">Selecciona la fecha final</string>
 
-    <string name="message_invalid_email">Ingrese un correo electronico valido.</string>
+    <string name="message_invalid_email">Ingrese un correo electrónico valido.</string>
     <string name="message_invalid_password">La contraseña debe contar con al menos 8 caracteres.</string>
 
     <string name="moth_enero">Enero</string>
@@ -88,8 +92,8 @@
     <string name="moth_noviembre">Noviembre</string>
     <string name="moth_diciembre">Diciembre</string>
 
-    <string name="wait">Favor de esperar un momento</string>
-    <string name="error">Ocurrio un error, favor de esperar un momento</string>
+    <string name="wait">Favor de esperar un momento.</string>
+    <string name="error">Ocurrió un error, favor de esperar un momento</string>
     <string name="invalid">Usuario o contraseña invalido</string>
 
 
@@ -101,7 +105,7 @@
     <string name="dialog_assorment_title">Editar</string>
     <string name="dialog_assorment_amount">Cantidad</string>
     <string name="dialog_assorment_price">Precio</string>
-    <string name="dialog_assorment_description">Descripcion</string>
+    <string name="dialog_assorment_description">Descripción</string>
     <string name="dialog_dish_title">Platillos</string>
     <string name="languaje">1</string>
 

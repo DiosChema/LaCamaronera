@@ -2,6 +2,8 @@ package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.Dialog.DialogDate
 import aegina.lacamaronera.Dialog.DialogSearch
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.AssormentIngredientObj
 import aegina.lacamaronera.Objetos.AssormentListObj
 import aegina.lacamaronera.Objetos.Urls
@@ -61,6 +63,8 @@ class Assorments : AppCompatActivity(),
     lateinit var dialogDate: DialogDate
     lateinit var dialogSearch: DialogSearch
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assorments)
@@ -70,6 +74,9 @@ class Assorments : AppCompatActivity(),
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         assignResources()
         createProgressDialog()
@@ -109,7 +116,7 @@ class Assorments : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentsRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewAssorments.RecyclerAdapter(listAssorments, contextTmp)
+        mViewAssorments.RecyclerAdapter(listAssorments, contextTmp, globalVariable)
         mRecyclerView.adapter = mViewAssorments
 
         if(!resources.getBoolean(R.bool.portrait_only))
@@ -122,7 +129,7 @@ class Assorments : AppCompatActivity(),
             val mRecyclerViewIngedient = findViewById<RecyclerView>(R.id.assormentsRecyclerViewItems)
             mRecyclerViewIngedient.setHasFixedSize(true)
             mRecyclerViewIngedient.layoutManager = LinearLayoutManager(contextTmp)
-            mViewAssormentsItems.RecyclerAdapter(listAssormentsIngredient, contextTmp)
+            mViewAssormentsItems.RecyclerAdapter(listAssormentsIngredient, contextTmp, globalVariable)
             mRecyclerViewIngedient.adapter = mViewAssormentsItems
 
             mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerViewIngedient, object :
@@ -188,12 +195,13 @@ class Assorments : AppCompatActivity(),
 
     fun getAssorments()
     {
-        val url = urls.url+urls.endPointAssorment.endPointGetAssorment
+        val url = globalVariable.user!!.url+urls.endPointAssorment.endPointGetAssorment
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("fechaInicial", dateFormat.format(dialogSearch.initialDate))
             jsonObject.put("fechaFinal", dateFormat.format(dialogSearch.finalDate))
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException)
         {
             e.printStackTrace()

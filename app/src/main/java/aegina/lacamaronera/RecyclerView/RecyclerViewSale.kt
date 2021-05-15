@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -18,15 +19,17 @@ class RecyclerViewSale : RecyclerView.Adapter<RecyclerViewSale.ViewHolder>() {
 
     var groups: MutableList<DishesObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<DishesObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<DishesObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -56,11 +59,11 @@ class RecyclerViewSale : RecyclerView.Adapter<RecyclerViewSale.ViewHolder>() {
         var buttonMore = view.findViewById(R.id.buttonMore) as Button
         var buttonLess = view.findViewById(R.id.buttonLess) as Button
 
-        fun bind(articulo: DishesObj) {
+        fun bind(articulo: DishesObj, globalVariable: GlobalClass) {
             itemAssormentIngredientName.text = articulo.nombre
             itemAssormentIngredientPrice.text = articulo.descripcion + " X $" + articulo.precio.toString()
             itemAssormentIngredientTotal.text = (parseDouble(articulo.descripcion) * articulo.precio).toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "pl" + articulo.idPlatillo+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "pl" + articulo.idPlatillo+ ".jpeg&token="+ globalVariable.user!!.token
             itemAssormentIngredientAmount.text = articulo.descripcion
             itemAssormentIngredientPhoto.loadUrl(url)
 

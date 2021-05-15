@@ -2,6 +2,8 @@ package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import android.app.Activity
@@ -53,6 +55,8 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
     lateinit var serviceObj : ServiceObj
     var idIngrediente = 0
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_services)
@@ -62,6 +66,9 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         createProgressDialog()
 
@@ -73,11 +80,12 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
 
     fun getIngredient()
     {
-        val url = urls.url+urls.endPointExpenses.endPointGetExpenses
+        val url = globalVariable.user!!.url+urls.endPointExpenses.endPointGetExpenses
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("idServicio", idIngrediente)
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -146,7 +154,7 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
     private fun llenarDatos()
     {
         var contador = 0
-        ingredientsPhoto.loadUrl(urls.url + urls.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio+".jpeg")
+        ingredientsPhoto.loadUrl(globalVariable.user!!.url + urls.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio+ ".jpeg&token=" + globalVariable.user!!.token +".jpeg")
         ingredientsName.text = serviceObj.nombre
         ingredientsDescription.text = serviceObj.descripcion
 
@@ -245,14 +253,21 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointExpenses.endPointUpdateExpenses
+        val url = globalVariable.user!!.url+urls.endPointExpenses.endPointUpdateExpenses
 
-        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-        val jsonTutPretty: String = gsonPretty.toJson(ingredientObj)
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("idServicio", ingredientObj.idServicio)
+            jsonObject.put("nombre", ingredientObj.nombre)
+            jsonObject.put("descripcion", ingredientObj.descripcion)
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
 
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
-        val body = RequestBody.create(JSON, jsonTutPretty)
+        val body = RequestBody.create(JSON, jsonObject.toString())
 
         val request = Request.Builder()
             .url(url)
@@ -316,7 +331,7 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
         val dialogCancelar = dialog.findViewById(R.id.dialogTextCancelar) as Button
         val dialogTitulo = dialog.findViewById(R.id.dialogTextTitulo) as TextView
 
-        dialogTitulo.text = getString(R.string.ingredient_delete)
+        dialogTitulo.text = getString(R.string.expenses_delete)
         dialogText.visibility = View.INVISIBLE
 
         dialogAceptar.setOnClickListener {
@@ -335,11 +350,12 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointExpenses.endPointDeleteServices
+        val url = globalVariable.user!!.url+urls.endPointExpenses.endPointDeleteServices
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("idServicio", serviceObj.idServicio)
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -402,12 +418,16 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
         val MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg")
         val req: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart(
+                "token",
+                globalVariable.user!!.token
+            )
+            .addFormDataPart(
                 "image",
                 "se$nombreImagen.jpeg",
                 RequestBody.create(MEDIA_TYPE_JPEG, file)
             ).build()
         val request = Request.Builder()
-            .url(urls.url+urls.endPointsImagenes.endPointAltaImagen)
+            .url(globalVariable.user!!.url+urls.endPointsImagenes.endPointAltaImagen)
             .post(req)
             .build()
         val client = OkHttpClient()
@@ -469,9 +489,10 @@ class ServicesDetails : AppCompatActivity() , DialogSelectPhoto.DialogSelectPhot
 
     companion object {
         //image pick code
-        private val IMAGE_PICK_CODE = 1000;
+        private val IMAGE_PICK_CODE = 1000
+
         //Permission code
-        private val PERMISSION_CODE = 1001;
+        private val PERMISSION_CODE = 1001
     }
 
 }

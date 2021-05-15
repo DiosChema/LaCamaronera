@@ -1,6 +1,8 @@
 package aegina.lacamaronera.Fragments
 
 import aegina.lacamaronera.Activities.Ingredients
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -19,6 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_ingredients.*
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 
@@ -32,11 +36,17 @@ class IngredientsFragment : Fragment() {
     lateinit var mViewIngredient : RecyclerViewIngredients
     lateinit var contextTmp: Context
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_ingredients, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(activity!!.applicationContext)
+
         assignResources()
         createProgressDialog()
         getIngredients()
@@ -70,17 +80,28 @@ class IngredientsFragment : Fragment() {
         val mRecyclerView = InventoryIngredient
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewIngredient.RecyclerAdapter(listIngredients, contextTmp)
+        mViewIngredient.RecyclerAdapter(listIngredients, contextTmp, globalVariable)
         mRecyclerView.adapter = mViewIngredient
     }
 
     fun getIngredients()
     {
-        val url = urls.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+        val url = globalVariable.user!!.url+urls.endPointsIngredientes.endPointObtenerIngredientes
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         progressDialog.show()
@@ -130,6 +151,10 @@ class IngredientsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        getIngredients()
+        if(globalVariable.updateWindow!!.refreshIngredient)
+        {
+            getIngredients()
+            globalVariable.updateWindow!!.refreshIngredient = false
+        }
     }
 }

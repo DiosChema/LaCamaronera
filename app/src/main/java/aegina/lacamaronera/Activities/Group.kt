@@ -1,6 +1,8 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.Dialog.DialogGruop
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.Errores
 import aegina.lacamaronera.Objetos.GroupObj
 import aegina.lacamaronera.Objetos.ResponseObj
@@ -27,7 +29,7 @@ import java.io.IOException
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
-class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
+class Group : AppCompatActivity(), DialogGruop.DialogGroupInt {
 
     lateinit var dialogPhoto: Dialog
     var listGroup: MutableList<GroupObj> = ArrayList()
@@ -39,6 +41,8 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     lateinit var mRecyclerView : RecyclerView
     lateinit var dialogGruop : DialogGruop
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -49,6 +53,9 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         createRecyclerView()
         assignResources()
@@ -108,11 +115,22 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsGrupo.endPointObtenerGrupos
+        val url = globalVariable.user!!.url+urls.endPointsGrupo.endPointObtenerGrupos
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         progressDialog.show()
@@ -162,11 +180,12 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     override fun newGroup(text: String) {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsGrupo.endPointAltaGrupo
+        val url = globalVariable.user!!.url+urls.endPointsGrupo.endPointAltaGrupo
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("nombre", text)
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -224,12 +243,13 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     override fun editGroup(text: String, position: Int) {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsGrupo.endPointActualizarFamilia
+        val url = globalVariable.user!!.url+urls.endPointsGrupo.endPointActualizarFamilia
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("nombre", text)
             jsonObject.put("idFamilia", listGroup[position].idFamilia)
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException)
         {
             e.printStackTrace()
@@ -290,11 +310,12 @@ class GroupInt : AppCompatActivity(), DialogGruop.DialogGroupInt {
     override fun deleteGroup(position: Int) {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsGrupo.endPointEliminarFamilia
+        val url = globalVariable.user!!.url+urls.endPointsGrupo.endPointEliminarFamilia
 
         val jsonObject = JSONObject()
         try {
             jsonObject.put("idFamilia", listGroup[position].idFamilia)
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException)
         {
             e.printStackTrace()

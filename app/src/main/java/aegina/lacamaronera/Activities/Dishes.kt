@@ -3,6 +3,8 @@ package aegina.lacamaronera.Activities
 import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Dialog.DialogIngredients
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
 import aegina.lacamaronera.RecyclerView.RecyclerItemClickListener
@@ -20,13 +22,17 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
@@ -64,6 +70,8 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
     var listaFamilia:ArrayList<String> = ArrayList()
     var listGroup: ArrayList<GroupObj> = ArrayList()
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dishes)
@@ -74,6 +82,9 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
+
         assignResources()
         createProgressDialog()
         getGroups()
@@ -81,7 +92,7 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         //getIngredients()
         dialogIngredients = DialogIngredients()
         dialogIngredients.textDish(this)
-        dialogIngredients.createDialog(contextTmp, activityTmp)
+        dialogIngredients.createDialog(contextTmp, activityTmp, globalVariable)
 
     }
 
@@ -128,7 +139,8 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
                     parseDouble(dishPrice.text.toString()),
                     ingredientsDish,
                     listGroup[dishGroup.selectedItemPosition].idFamilia,
-                    dishDescription.text.toString()
+                    dishDescription.text.toString(),
+                    globalVariable.user!!.token
                 )
 
                 addDish(dishesObj)
@@ -152,11 +164,22 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointsGrupo.endPointObtenerGrupos
+        val url = globalVariable.user!!.url+urls.endPointsGrupo.endPointObtenerGrupos
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         progressDialog.show()
@@ -195,7 +218,8 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
 
                     }
                 }
-                catch (e: Exception){}
+                catch (e: Exception){
+                }
                 finally
                 {
                     progressDialog.dismiss()
@@ -210,7 +234,7 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         val mRecyclerView = findViewById<RecyclerView>(R.id.dishIngredients)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL ,false)
-        mViewIngredient.RecyclerAdapter(listIngredients, this)
+        mViewIngredient.RecyclerAdapter(listIngredients, this, globalVariable)
         mRecyclerView.adapter = mViewIngredient
 
         mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerView, object :
@@ -297,14 +321,15 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
     {
         val errores = Errores()
 
-        val url = urls.url+urls.endPointDishes.endPointAltaPlatillos
+        val url = globalVariable.user!!.url+urls.endPointDishes.endPointAltaPlatillos
 
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
         val jsonTutPretty: String = gsonPretty.toJson(dishesObj)
 
-        val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
         val body = RequestBody.create(JSON, jsonTutPretty)
+
+        val client = OkHttpClient()
 
         val request = Request.Builder()
             .url(url)
@@ -338,11 +363,13 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
                                 }
                                 else
                                 {
+                                    globalVariable.updateWindow!!.refreshDish = true
                                     finish()
                                 }
                             }
                             else
                             {
+                                progressDialog.dismiss()
                                 errores.procesarErrorMensaje(contextTmp, activityTmp, respuesta)
                             }
                         }
@@ -367,12 +394,15 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
         val MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg")
         val req: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
             .addFormDataPart(
+                "token",
+                globalVariable.user!!.token)
+            .addFormDataPart(
                 "image",
                 "pl$nombreImagen.jpeg",
                 RequestBody.create(MEDIA_TYPE_JPEG, file)
             ).build()
         val request = Request.Builder()
-            .url(urls.url+urls.endPointsImagenes.endPointAltaImagen)
+            .url(globalVariable.user!!.url+urls.endPointsImagenes.endPointAltaImagen)
             .post(req)
             .build()
         val client = OkHttpClient()
@@ -428,9 +458,10 @@ class Dishes : AppCompatActivity(), DialogIngredients.DialogIngredientsInt,
 
     companion object {
         //image pick code
-        private val IMAGE_PICK_CODE = 1000;
+        private val IMAGE_PICK_CODE = 1000
+
         //Permission code
-        private val PERMISSION_CODE = 1001;
+        private val PERMISSION_CODE = 1001
     }
 
 }

@@ -1,6 +1,10 @@
 package aegina.lacamaronera.Activities
 
+import aegina.lacamaronera.Dialog.DialogDate
+import aegina.lacamaronera.Dialog.DialogSearch
 import aegina.lacamaronera.Dialog.DialogSelectPhoto
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.General.Photo
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.R
@@ -41,9 +45,12 @@ import java.io.InputStream
 import java.lang.Double
 import java.lang.Exception
 import java.text.SimpleDateFormat
+import kotlin.coroutines.EmptyCoroutineContext
 
 class Sales : AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener{
+    NavigationView.OnNavigationItemSelectedListener,
+    DialogSearch.DialogSearchInt,
+    DialogDate.DialogDateInt{
 
     lateinit var drawerLayout: DrawerLayout
     lateinit var mViewAssorments: RecyclerViewSales
@@ -57,9 +64,17 @@ class Sales : AppCompatActivity(),
     private val urls: Urls = Urls()
     lateinit var contextTmp: Context
     lateinit var activityTmp: Activity
+
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+
     var listAssormentsIngredient = ArrayList<DishSaleObj>()
 
     var listAssorments = ArrayList<SaleDishObj>()
+
+    lateinit var dialogDate: DialogDate
+    lateinit var dialogSearch: DialogSearch
+
+    lateinit var globalVariable: GlobalClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,10 +86,26 @@ class Sales : AppCompatActivity(),
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        draweMenu()
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
+
         assignResources()
+        draweMenu()
         createProgressDialog()
+        createDialogDate()
+        createDialogSearch()
+        dialogDate.assignInitialsDates()
         getSales()
+    }
+
+    private fun createDialogSearch() {
+        dialogSearch = DialogSearch()
+        dialogSearch.createWindow(this, this)
+    }
+
+    private fun createDialogDate() {
+        dialogDate = DialogDate()
+        dialogDate.createWindow(this)
     }
 
     private fun assignResources() {
@@ -82,6 +113,12 @@ class Sales : AppCompatActivity(),
         activityTmp = this
 
         createRecyclerView()
+        val assormentsSearch: ImageButton = findViewById(R.id.assormentsSearch)
+
+        assormentsSearch.setOnClickListener()
+        {
+            dialogSearch.showDialog()
+        }
     }
 
     private fun createRecyclerView()
@@ -90,7 +127,7 @@ class Sales : AppCompatActivity(),
         val mRecyclerView = findViewById<RecyclerView>(R.id.assormentsRecyclerView)
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewAssorments.RecyclerAdapter(listAssorments, contextTmp)
+        mViewAssorments.RecyclerAdapter(listAssorments, contextTmp, globalVariable)
         mRecyclerView.adapter = mViewAssorments
 
         if(!resources.getBoolean(R.bool.portrait_only))
@@ -103,7 +140,7 @@ class Sales : AppCompatActivity(),
             val mRecyclerViewIngedient = findViewById<RecyclerView>(R.id.assormentsRecyclerViewItems)
             mRecyclerViewIngedient.setHasFixedSize(true)
             mRecyclerViewIngedient.layoutManager = LinearLayoutManager(contextTmp)
-            mViewAssormentsItems.RecyclerAdapter(listAssormentsIngredient, contextTmp)
+            mViewAssormentsItems.RecyclerAdapter(listAssormentsIngredient, contextTmp, globalVariable)
             mRecyclerViewIngedient.adapter = mViewAssormentsItems
 
             mRecyclerView.addOnItemTouchListener(RecyclerItemClickListener(contextTmp, mRecyclerViewIngedient, object :
@@ -169,10 +206,13 @@ class Sales : AppCompatActivity(),
 
     fun getSales()
     {
-        val url = urls.url+urls.endPointSale.endPointGetSale
+        val url = globalVariable.user!!.url+urls.endPointSale.endPointGetSale
 
         val jsonObject = JSONObject()
         try {
+            jsonObject.put("fechaInicial", dateFormat.format(dialogSearch.initialDate))
+            jsonObject.put("fechaFinal", dateFormat.format(dialogSearch.finalDate))
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException)
         {
             e.printStackTrace()
@@ -273,6 +313,36 @@ class Sales : AppCompatActivity(),
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun getInitialDate() {
+        dialogSearch.assignInitialText(dialogDate.getInitialDateText())
+        dialogSearch.initialDate = dialogDate.fechaInicial
+    }
+
+    override fun getFinalDate() {
+        dialogSearch.assignFinalText(dialogDate.getFinalDateText())
+        dialogSearch.finalDate = dialogDate.fechaFinal
+    }
+
+    override fun getDate() {
+        dialogSearch.assignInitialText(dialogDate.getInitialDateText())
+        dialogSearch.assignFinalText(dialogDate.getFinalDateText())
+
+        dialogSearch.initialDate = dialogDate.fechaInicial
+        dialogSearch.finalDate = dialogDate.fechaFinal
+    }
+
+    override fun updateInitialDate() {
+        dialogDate.abrirDialogFechaInicial(dialogSearch.initialDate, dialogSearch.finalDate)
+    }
+
+    override fun updateFinalDate() {
+        dialogDate.abrirDialogFechaFinal(dialogSearch.initialDate, dialogSearch.finalDate)
+    }
+
+    override fun search() {
+        getSales()
     }
 
 }

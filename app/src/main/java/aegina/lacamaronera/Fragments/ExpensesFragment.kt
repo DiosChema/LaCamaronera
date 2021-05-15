@@ -1,6 +1,8 @@
 package aegina.lacamaronera.Fragments
 
 import aegina.lacamaronera.Activities.Services
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.ServiceObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -27,7 +29,7 @@ import java.lang.Exception
 class ExpensesFragment : Fragment(){
 
     var listDishes: MutableList<ServiceObj> = ArrayList()
-    val context = activity;
+    val context = activity
 
     private val urls: Urls = Urls()
     lateinit var progressDialog: ProgressDialog
@@ -35,11 +37,17 @@ class ExpensesFragment : Fragment(){
     lateinit var mViewDish : RecyclerViewServices
     lateinit var contextTmp: Context
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_ingredients, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(activity!!.applicationContext)
+
         assignResources()
         createProgressDialog()
         getDishes()
@@ -75,16 +83,17 @@ class ExpensesFragment : Fragment(){
         val mRecyclerView = InventoryIngredient
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewDish.RecyclerAdapter(listDishes, activity!!.applicationContext)
+        mViewDish.RecyclerAdapter(listDishes, activity!!.applicationContext, globalVariable)
         mRecyclerView.adapter = mViewDish
     }
 
     fun getDishes()
     {
-        val url = urls.url+urls.endPointExpenses.endPointGetExpenses
+        val url = globalVariable.user!!.url+urls.endPointExpenses.endPointGetExpenses
 
         val jsonObject = JSONObject()
         try {
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException) {
             e.printStackTrace()
         }

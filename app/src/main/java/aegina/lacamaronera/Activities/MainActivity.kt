@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var loginPassword:TextView
     lateinit var contextTmp: Context
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun logIn()
     {
+
+        var globalVariable: GlobalClass = applicationContext as GlobalClass
+        globalVariable.user = null
+
         var email = loginEmail.text.toString()
         email = email.toLowerCase(Locale.ROOT)
         val password = loginPassword.text.toString()
@@ -79,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         {
             jsonObject.put("user", email)
             jsonObject.put("password", password)
+            jsonObject.put("idEmpresa", resources.getInteger(R.integer.company))
             loginPassword.text = ""
         }
         catch (e: JSONException)
@@ -115,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     else
                     {
-                        Toast.makeText(contextTmp, getString(R.string.error), Toast.LENGTH_LONG).show()
+                        Toast.makeText(contextTmp, getString(R.string.invalid), Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -131,6 +138,7 @@ class MainActivity : AppCompatActivity() {
 
                     if(respuesta.status == 0)
                     {
+                        respuesta.usuario.online = true
                         insertUser(contextTmp, respuesta.usuario, password)
 
                         val globalVariable = applicationContext as GlobalClass
@@ -147,16 +155,14 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-                catch (e: Exception)
+                catch (e: Exception){}
+                finally
                 {
-                    val perro = 1
+                    runOnUiThread()
+                    {
+                        progressDialog.dismiss()
+                    }
                 }
-
-                runOnUiThread()
-                {
-                    progressDialog.dismiss()
-                }
-
             }
         })
 
@@ -183,7 +189,7 @@ class MainActivity : AppCompatActivity() {
 
         val user = query.getUser(contextTmp, email, password)
 
-        return user.idEmpleado != -1
+        return user.idUsuario != -1
     }
 
     fun String.isEmailValid(): Boolean {

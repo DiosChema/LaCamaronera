@@ -2,6 +2,7 @@ package aegina.lacamaronera.RecyclerView
 
 import aegina.lacamaronera.Activities.ServicesDetails
 import aegina.lacamaronera.Activities.ServicesExpense
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.ServiceObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -20,15 +21,17 @@ class RecyclerViewServices : RecyclerView.Adapter<RecyclerViewServices.ViewHolde
 
     var groups: MutableList<ServiceObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<ServiceObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<ServiceObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,11 +55,11 @@ class RecyclerViewServices : RecyclerView.Adapter<RecyclerViewServices.ViewHolde
         var itemIngredientName = view.findViewById(R.id.itemDishName) as TextView
         var itemIngredientDescription = view.findViewById(R.id.itemDishDescription) as TextView
 
-        fun bind(articulo: ServiceObj) {
+        fun bind(articulo: ServiceObj, globalVariable: GlobalClass) {
 
             itemIngredientName.text = articulo.nombre
             itemIngredientDescription.text = articulo.descripcion
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "se" + articulo.idServicio+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "se" + articulo.idServicio+ ".jpeg&token="+ globalVariable.user!!.token
             itemIngredientImage.loadUrl(url)
 
             itemView.setOnClickListener()

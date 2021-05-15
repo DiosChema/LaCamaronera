@@ -1,5 +1,7 @@
 package aegina.lacamaronera.Objetos
 
+import android.content.Context
+
 data class Urls(
     var url:String,
     var endPointsGrupo:UrlsGrups,
@@ -13,7 +15,7 @@ data class Urls(
 )
 {
     constructor(): this(
-        "https://pocketsale.us-3.evennode.com/Camaroneria/",
+        "https://pocketsale.us-3.evennode.com/Apis/",
         UrlsGrups(
             "Familia/ObtenerFamilias",
             "Familia/AltaFamilia",
@@ -59,6 +61,11 @@ data class Urls(
             "Servicios/AltaGastoServicio"
         )
     )
+
+    fun getUrl(context: Context)
+    {
+
+    }
 }
 
 data class UrlsGrups(

@@ -1,6 +1,7 @@
 package aegina.lacamaronera.RecyclerView
 
 import aegina.lacamaronera.Activities.IngredientsDetails
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -18,15 +19,17 @@ class RecyclerViewIngredients : RecyclerView.Adapter<RecyclerViewIngredients.Vie
 
     var groups: MutableList<IngredientObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<IngredientObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<IngredientObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -52,12 +55,12 @@ class RecyclerViewIngredients : RecyclerView.Adapter<RecyclerViewIngredients.Vie
         var itemIngredientAmount = view.findViewById(R.id.itemIngredientAmount) as TextView
         var itemIngredientPrice = view.findViewById(R.id.itemIngredientPrice) as TextView
 
-        fun bind(articulo: IngredientObj) {
+        fun bind(articulo: IngredientObj, globalVariable: GlobalClass) {
             itemIngredientName.text = articulo.nombre
             itemIngredientDescription.text = articulo.descripcion
             itemIngredientAmount.text = articulo.existencia.toString()
             itemIngredientPrice.text = articulo.costo.toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+ ".jpeg&token="+ globalVariable.user!!.token
             itemIngredientImage.loadUrl(url)
 
             itemView.setOnClickListener()

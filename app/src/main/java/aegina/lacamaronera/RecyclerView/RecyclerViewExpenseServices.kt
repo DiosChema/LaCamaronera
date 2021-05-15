@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.ExpenseServiceObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -17,15 +18,17 @@ class RecyclerViewExpenseServices : RecyclerView.Adapter<RecyclerViewExpenseServ
 
     var groups: MutableList<ExpenseServiceObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<ExpenseServiceObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<ExpenseServiceObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -53,12 +56,12 @@ class RecyclerViewExpenseServices : RecyclerView.Adapter<RecyclerViewExpenseServ
         var simpleDate: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         var simpleDateHours: SimpleDateFormat = SimpleDateFormat("HH:mm:ss")
 
-        fun bind(articulo: ExpenseServiceObj) {
+        fun bind(articulo: ExpenseServiceObj, globalVariable: GlobalClass) {
 
             itemAssormentIngredientName.text = articulo.nombre
             itemAssormentIngredientPrice.text = simpleDate.format(articulo.fecha) + "  " + simpleDateHours.format(articulo.fecha)
             itemAssormentIngredientTotal.text = articulo.gasto.toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "se" + articulo.idServicio+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "se" + articulo.idServicio+ ".jpeg&token="+ globalVariable.user!!.token
             itemAssormentIngredientPhoto.loadUrl(url)
         }
 

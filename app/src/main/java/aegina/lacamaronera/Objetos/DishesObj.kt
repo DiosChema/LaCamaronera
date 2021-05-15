@@ -8,5 +8,6 @@ data class DishesObj(
     var precio:Double,
     var ingredientes:ArrayList<IngredientDishObj>,
     var idFamilia:Int,
-    var descripcion:String
+    var descripcion:String,
+    var token:String
 ):Serializable

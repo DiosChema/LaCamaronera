@@ -1,7 +1,9 @@
 package aegina.lacamaronera.Fragments
 
 import aegina.lacamaronera.Activities.Dishes
-import aegina.lacamaronera.Activities.GroupInt
+import aegina.lacamaronera.Activities.Group
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.DishesObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -20,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.fragment_platillos.*
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 
@@ -33,11 +37,17 @@ class DishesFragment : Fragment() {
     lateinit var mViewDish : RecyclerViewDishes
     lateinit var contextTmp: Context
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_platillos, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(activity!!.applicationContext)
+
         assignResources()
         createProgressDialog()
         getDishes()
@@ -66,7 +76,7 @@ class DishesFragment : Fragment() {
 
         inventoryAddGroup.setOnClickListener()
         {
-            val intent = Intent(activity, GroupInt::class.java)
+            val intent = Intent(activity, Group::class.java)
             startActivity(intent)
         }
 
@@ -80,17 +90,28 @@ class DishesFragment : Fragment() {
         val mRecyclerView = InventoryDish
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewDish.RecyclerAdapter(listDishes, contextTmp)
+        mViewDish.RecyclerAdapter(listDishes, contextTmp, globalVariable)
         mRecyclerView.adapter = mViewDish
     }
 
     fun getDishes()
     {
-        val url = urls.url+urls.endPointDishes.endPointConsultarPlatillos
+        val url = globalVariable.user!!.url+urls.endPointDishes.endPointConsultarPlatillos
+
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("token", globalVariable.user!!.token)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
         val client = OkHttpClient()
+        val JSON = MediaType.parse("application/json; charset=utf-8")
+        val body = RequestBody.create(JSON, jsonObject.toString())
+
         val request = Request.Builder()
             .url(url)
-            .get()
+            .post(body)
             .build()
 
         progressDialog.show()
@@ -140,7 +161,11 @@ class DishesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        getDishes()
+        if(globalVariable.updateWindow!!.refreshDish)
+        {
+            globalVariable.updateWindow!!.refreshDish = false
+            getDishes()
+        }
     }
 
 }

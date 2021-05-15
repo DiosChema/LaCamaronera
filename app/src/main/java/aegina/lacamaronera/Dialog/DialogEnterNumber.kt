@@ -7,10 +7,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.widget.addTextChangedListener
 import org.w3c.dom.Text
 import java.lang.Double.parseDouble
 
@@ -20,7 +24,9 @@ class DialogEnterNumber: AppCompatDialogFragment()
     lateinit var contextTmp : Context
     lateinit var activityTmp: Activity
     lateinit var dialogIngredients: DialogEnterNumberInt
+    lateinit var dialogEnterNumberTotal: TextView
     lateinit var dialogEnterNumberText: TextView
+    lateinit var dialogEnterNumberExchange: TextView
 
     lateinit var dialogEnterNumber : Dialog
     var positionTmp = 0
@@ -38,7 +44,9 @@ class DialogEnterNumber: AppCompatDialogFragment()
         dialogEnterNumber.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogEnterNumber.window?.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT)
 
+        dialogEnterNumberTotal = dialogEnterNumber.findViewById(R.id.dialogEnterNumberTotal) as TextView
         dialogEnterNumberText = dialogEnterNumber.findViewById(R.id.dialogEnterNumberText) as TextView
+        dialogEnterNumberExchange = dialogEnterNumber.findViewById(R.id.dialogEnterNumberExchange) as TextView
         val dialogEnterNumberOne = dialogEnterNumber.findViewById(R.id.dialogEnterNumberOne) as Button
         val dialogEnterNumberTwo = dialogEnterNumber.findViewById(R.id.dialogEnterNumberTwo) as Button
         val dialogEnterNumberThree = dialogEnterNumber.findViewById(R.id.dialogEnterNumberThree) as Button
@@ -54,6 +62,15 @@ class DialogEnterNumber: AppCompatDialogFragment()
         val dialogEnterNumberCancel = dialogEnterNumber.findViewById(R.id.dialogEnterNumberCancel) as Button
         val dialogEnterNumberEnter = dialogEnterNumber.findViewById(R.id.dialogEnterNumberEnter) as Button
 
+        dialogEnterNumberTotal.isEnabled = false
+        dialogEnterNumberTotal.inputType = InputType.TYPE_NULL
+
+        dialogEnterNumberText.isEnabled = false
+        dialogEnterNumberText.inputType = InputType.TYPE_NULL
+
+        dialogEnterNumberExchange.isEnabled = false
+        dialogEnterNumberExchange.inputType = InputType.TYPE_NULL
+
         dialogEnterNumberOne.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "1"}
         dialogEnterNumberTwo.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "2"}
         dialogEnterNumberThree.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "3"}
@@ -64,6 +81,38 @@ class DialogEnterNumber: AppCompatDialogFragment()
         dialogEnterNumberEight.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "8"}
         dialogEnterNumberNine.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "9"}
         dialogEnterNumberCero.setOnClickListener{dialogEnterNumberText.text = dialogEnterNumberText.text.toString() + "0"}
+
+        dialogEnterNumberText.addTextChangedListener(object : TextWatcher
+        {
+            override fun afterTextChanged(s: Editable)
+            {
+                if(s.toString() == ".")
+                {
+                    dialogEnterNumberExchange.text = dialogEnterNumberTotal.text.toString()
+                }
+                else
+                {
+                    val pago =
+                        if(dialogEnterNumberText.text.length > 0)
+                        {
+                            parseDouble(dialogEnterNumberText.text.toString())
+                        }
+                        else
+                        {
+                            0.0
+                        }
+
+
+                    dialogEnterNumberExchange.text = ((parseDouble(dialogEnterNumberTotal.text.toString()) - pago) * -1).toString()
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {}
+        })
 
         dialogEnterNumberDot.setOnClickListener()
         {
@@ -90,7 +139,7 @@ class DialogEnterNumber: AppCompatDialogFragment()
         {
             if(dialogEnterNumberText.text.isNotEmpty() && dialogEnterNumberText.text.toString() != ".")
             {
-                dialogIngredients.getNumber(parseDouble(dialogEnterNumberText.text.toString()), positionTmp)
+                dialogIngredients.finishSale()
                 dialogEnterNumber.dismiss()
             }
 
@@ -98,15 +147,16 @@ class DialogEnterNumber: AppCompatDialogFragment()
 
     }
 
-    fun showDialog(position: Int)
+    fun showDialog(total: String)
     {
-        positionTmp = position
+        dialogEnterNumberTotal.text = total
         dialogEnterNumberText.text = ""
+        //dialogEnterNumberExchange = ""
         dialogEnterNumber.show()
     }
 
 
     interface DialogEnterNumberInt {
-        fun getNumber(number: Double, position: Int)
+        fun finishSale()
     }
 }

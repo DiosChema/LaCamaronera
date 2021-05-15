@@ -1,5 +1,7 @@
 package aegina.lacamaronera.Fragments
 
+import aegina.lacamaronera.General.GetGlobalClass
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.ExpenseServiceObj
 import aegina.lacamaronera.Objetos.ServiceObj
 import aegina.lacamaronera.Objetos.Urls
@@ -35,11 +37,17 @@ class ExpensesHisFragment : Fragment() {
     lateinit var mViewDish : RecyclerViewExpenseServices
     lateinit var contextTmp: Context
 
+    lateinit var globalVariable: GlobalClass
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_ingredients, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(activity!!.applicationContext)
+
         assignResources()
         createProgressDialog()
         getDishes()
@@ -75,16 +83,17 @@ class ExpensesHisFragment : Fragment() {
         val mRecyclerView = InventoryIngredient
         mRecyclerView.setHasFixedSize(true)
         mRecyclerView.layoutManager = LinearLayoutManager(contextTmp)
-        mViewDish.RecyclerAdapter(listDishes, contextTmp)
+        mViewDish.RecyclerAdapter(listDishes, contextTmp, globalVariable)
         mRecyclerView.adapter = mViewDish
     }
 
     fun getDishes()
     {
-        val url = urls.url+urls.endPointExpenses.endPointGetExpensesServices
+        val url = globalVariable.user!!.url+urls.endPointExpenses.endPointGetExpensesServices
 
         val jsonObject = JSONObject()
         try {
+            jsonObject.put("token", globalVariable.user!!.token)
         } catch (e: JSONException) {
             e.printStackTrace()
         }

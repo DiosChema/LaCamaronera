@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.AssormentListObj
 import aegina.lacamaronera.Objetos.AssormentObj
 import aegina.lacamaronera.R
@@ -21,17 +22,19 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
 
     var groups: MutableList<AssormentListObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
     var selected_position = -1
 
-    fun RecyclerAdapter(listGroups: MutableList<AssormentListObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<AssormentListObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
         holder.itemView.setBackgroundColor(if(selected_position == position) holder.itemView.context.resources.getColor(R.color.light_gray) else Color.TRANSPARENT)
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,7 +62,7 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
         var simpleDate: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
         var simpleDateHours: SimpleDateFormat = SimpleDateFormat("HH:mm:ss")
 
-        fun bind(articulo: AssormentListObj) {
+        fun bind(articulo: AssormentListObj, globalVariable: GlobalClass) {
 
             val mViewVentas = RecyclerViewAssormentIngredient()
             val mRecyclerView : RecyclerView = itemAssormentRecyclerView
@@ -73,7 +76,7 @@ class RecyclerViewAssorments : RecyclerView.Adapter<RecyclerViewAssorments.ViewH
                     if(llenarRecyclerView)
                     {
                         if (itemView.context != null) {
-                            mViewVentas.RecyclerAdapter(articulo.ingredientes.toMutableList(), itemView.context)
+                            mViewVentas.RecyclerAdapter(articulo.ingredientes.toMutableList(), itemView.context, globalVariable)
                         }
                         mRecyclerView.adapter = mViewVentas
                         llenarRecyclerView = false

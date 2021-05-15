@@ -142,10 +142,11 @@ class Photo
 
     companion object {
         //image pick code
-        private val IMAGE_PICK_CODE = 1000;
+        private val IMAGE_PICK_CODE = 1000
+
         //Permission code
-        private val PERMISSION_CODE = 1001;
-        private val IMAGE_CAPTURE_CODE = 1001;
+        private val PERMISSION_CODE = 1001
+        private val IMAGE_CAPTURE_CODE = 1001
     }
 
 }

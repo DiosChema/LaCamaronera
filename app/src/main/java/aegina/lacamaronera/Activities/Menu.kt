@@ -1,6 +1,7 @@
 package aegina.lacamaronera.Activities
 
 import aegina.lacamaronera.DB.Query
+import aegina.lacamaronera.General.GetGlobalClass
 import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.*
 import aegina.lacamaronera.Pagers.PagerInventory
@@ -21,6 +22,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.GsonBuilder
 import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 import java.lang.Exception
 import kotlin.collections.ArrayList
@@ -45,6 +48,9 @@ class Menu : AppCompatActivity(),
         } else {
             ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
+
+        val getGlobalClass = GetGlobalClass()
+        globalVariable = getGlobalClass.globalClass(applicationContext)
 
         draweMenu()
         assignResources()
@@ -117,15 +123,16 @@ class Menu : AppCompatActivity(),
         val urls = Urls()
         val errores = Errores()
 
-        val url = urls.url+urls.endPointSale.endPointPostSales
+        val url = globalVariable.user!!.url+urls.endPointSale.endPointPostSales
 
-        val dishesTmp = UploadDishesObj(sales)
+        val dishesTmp = UploadDishesObj(sales, globalVariable.user!!.token)
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
         val jsonTutPretty: String = gsonPretty.toJson(dishesTmp)
 
         val client = OkHttpClient()
         val JSON = MediaType.parse("application/json; charset=utf-8")
         val body = RequestBody.create(JSON, jsonTutPretty)
+
         val request = Request.Builder()
             .url(url)
             .post(body)

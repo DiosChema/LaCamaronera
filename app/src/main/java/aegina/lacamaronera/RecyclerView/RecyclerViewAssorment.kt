@@ -1,5 +1,6 @@
 package aegina.lacamaronera.RecyclerView
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.IngredientObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -18,15 +19,17 @@ class RecyclerViewAssorment : RecyclerView.Adapter<RecyclerViewAssorment.ViewHol
 
     var groups: MutableList<IngredientObj> = ArrayList()
     lateinit var context: Context
+    lateinit var globalClass: GlobalClass
 
-    fun RecyclerAdapter(listGroups: MutableList<IngredientObj>, context: Context) {
+    fun RecyclerAdapter(listGroups: MutableList<IngredientObj>, context: Context, globalClass: GlobalClass) {
         this.groups = listGroups
         this.context = context
+        this.globalClass = globalClass
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = groups[position]
-        holder.bind(item)
+        holder.bind(item, globalClass)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -55,11 +58,11 @@ class RecyclerViewAssorment : RecyclerView.Adapter<RecyclerViewAssorment.ViewHol
         var buttonMore = view.findViewById(R.id.buttonMore) as Button
         var buttonLess = view.findViewById(R.id.buttonLess) as Button
 
-        fun bind(articulo: IngredientObj) {
+        fun bind(articulo: IngredientObj, globalVariable: GlobalClass) {
             itemAssormentIngredientName.text = articulo.nombre
             itemAssormentIngredientPrice.text = articulo.existencia.toString() + " X $" + articulo.costo.toString()
             itemAssormentIngredientTotal.text = (articulo.existencia * articulo.costo).toString()
-            val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+".jpeg"
+            val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "in" + articulo.idIngrediente+ ".jpeg&token="+ globalVariable.user!!.token
             itemAssormentIngredientAmount.text = articulo.existencia.toString()
             itemAssormentIngredientPhoto.loadUrl(url)
 

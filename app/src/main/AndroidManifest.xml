@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activities.ServicesExpense"></activity>
+        <activity
+            android:name=".Activities.ServicesExpense"
+            android:screenOrientation="behind"/>
         <activity
             android:name=".Activities.Sales"
             android:screenOrientation="behind" />
@@ -48,7 +50,7 @@
             android:name=".Activities.ServicesDetails"
             android:screenOrientation="behind" />
         <activity
-            android:name=".Activities.GroupInt"
+            android:name=".Activities.Group"
             android:screenOrientation="behind" />
         <activity
             android:name=".Activities.Dishes"

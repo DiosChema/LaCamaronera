@@ -156,7 +156,7 @@ class DialogDate : AppCompatDialogFragment()
         var calendarTmp = Calendar.getInstance()
         calendarTmp.set(year, month, day)
         calendarTmp = asignarHoraCalendar(calendarTmp, 23, 59, 59)
-        calendarTmp.timeZone = Calendar.getInstance().timeZone;
+        calendarTmp.timeZone = Calendar.getInstance().timeZone
 
         fechaFinal = calendarTmp.time
     }

@@ -1,5 +1,6 @@
 package aegina.lacamaronera.Dialog
 
+import aegina.lacamaronera.General.GlobalClass
 import aegina.lacamaronera.Objetos.ServiceObj
 import aegina.lacamaronera.Objetos.Urls
 import aegina.lacamaronera.R
@@ -31,7 +32,10 @@ class DialogServices : AppCompatDialogFragment() {
     lateinit var dialogTextAccept : Button
     lateinit var dialogTextCancel : Button
 
-    fun createDialogService(context: Context, activity: Activity){
+    lateinit var globalVariable: GlobalClass
+
+    fun createDialogService(context: Context, activity: Activity, globalClass: GlobalClass){
+        globalVariable = globalClass
         dialogGroup = Dialog(context)
 
         dialogGroup.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -53,7 +57,7 @@ class DialogServices : AppCompatDialogFragment() {
     {
         dialogTextText.setText(serviceObj.nombre)
 
-        val url = url.url + url.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio+".jpeg"
+        val url = globalVariable.user!!.url + url.endPointsImagenes.endPointObtenerImagen + "se" + serviceObj.idServicio +".jpeg&token="+ globalVariable.user!!.token
 
         dialogServicesPhoto.loadUrl(url)
 
